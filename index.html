@@ -1,0 +1,2071 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a0f08">
+<title>Fléau — Fiche Figurant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a0f08;
+    --ink-soft: #2d1d12;
+    --parchment: #e8d9b8;
+    --parchment-light: #f4e9d0;
+    --parchment-dark: #c9b88f;
+    --gold: #b8893a;
+    --gold-bright: #d4a754;
+    --gold-deep: #8a6420;
+    --crimson: #6b1f1f;
+    --crimson-bright: #a83232;
+    --shadow: rgba(20, 10, 5, 0.6);
+    --border: rgba(184, 137, 58, 0.35);
+    --border-strong: rgba(184, 137, 58, 0.7);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    background: var(--ink);
+    color: var(--parchment);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    line-height: 1.5;
+    min-height: 100vh;
+    overscroll-behavior: none;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at top, rgba(184, 137, 58, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom, rgba(107, 31, 31, 0.06) 0%, transparent 60%),
+      var(--ink);
+    background-attachment: fixed;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    z-index: 1;
+  }
+
+  .app { position: relative; z-index: 2; min-height: 100vh; }
+
+  header {
+    padding: 1.6rem 1.2rem 1.2rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: linear-gradient(to bottom, var(--ink) 70%, rgba(26, 15, 8, 0.95));
+    backdrop-filter: blur(6px);
+  }
+
+  .logo {
+    font-family: 'UnifrakturCook', cursive;
+    font-size: 2rem;
+    color: var(--gold-bright);
+    letter-spacing: 0.02em;
+    text-shadow: 0 2px 8px rgba(184, 137, 58, 0.3);
+    line-height: 1;
+  }
+
+  .subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--parchment-dark);
+    margin-top: 0.4rem;
+  }
+
+  .form-type {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin-top: 0.6rem;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 100px;
+    display: inline-block;
+  }
+
+  .ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    margin: 0.6rem auto 0;
+    color: var(--gold);
+    font-size: 0.8rem;
+  }
+  .ornament::before, .ornament::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+
+  .config-btn {
+    position: absolute;
+    top: 1.6rem;
+    right: 1rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--gold);
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+  }
+  .config-btn:active { background: rgba(184, 137, 58, 0.15); }
+
+  main {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem 1rem 8rem;
+  }
+
+  .intro {
+    background: linear-gradient(135deg, rgba(184, 137, 58, 0.08), rgba(107, 31, 31, 0.05));
+    border-left: 3px solid var(--gold);
+    padding: 1rem 1.1rem;
+    margin: 1rem 0 1.5rem;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--parchment-light);
+    border-radius: 0 4px 4px 0;
+  }
+  .intro strong { color: var(--gold-bright); font-style: normal; font-weight: 600; }
+
+  .section {
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(45, 29, 18, 0.4), rgba(26, 15, 8, 0.6));
+  }
+
+  .section-header {
+    padding: 0.9rem 1rem;
+    background: linear-gradient(90deg, rgba(184, 137, 58, 0.12), transparent);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .section-num {
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--gold-deep);
+    color: var(--parchment-light);
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid var(--gold-bright);
+  }
+
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gold-bright);
+    flex: 1;
+  }
+
+  .chevron {
+    color: var(--gold);
+    transition: transform 0.3s;
+    font-size: 0.8rem;
+  }
+  .section.collapsed .chevron { transform: rotate(-90deg); }
+
+  .section-body {
+    padding: 1.2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    max-height: 50000px;
+    transition: max-height 0.4s, padding 0.3s, opacity 0.3s;
+    overflow: hidden;
+  }
+  .section.collapsed .section-body {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+  }
+
+  .field { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .field-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--parchment-dark);
+  }
+
+  .field-hint {
+    font-size: 0.85rem;
+    color: var(--parchment-dark);
+    font-style: italic;
+    margin-top: -0.1rem;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    background: rgba(244, 233, 208, 0.06);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--parchment-light);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-appearance: none;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--gold-bright);
+    background: rgba(244, 233, 208, 0.1);
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: rgba(232, 217, 184, 0.35);
+    font-style: italic;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.5;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23b8893a' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+  }
+
+  select option { background: var(--ink-soft); color: var(--parchment-light); }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .chip {
+    padding: 0.45rem 0.85rem;
+    background: rgba(244, 233, 208, 0.04);
+    border: 1px solid var(--border);
+    color: var(--parchment-dark);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .chip:hover { border-color: var(--gold); color: var(--parchment-light); }
+
+  .chip.selected {
+    background: linear-gradient(180deg, var(--gold-deep), rgba(138, 100, 32, 0.7));
+    border-color: var(--gold-bright);
+    color: var(--parchment-light);
+    box-shadow: 0 0 8px rgba(184, 137, 58, 0.3);
+  }
+
+  /* Chip restriction (peuple-specifique) */
+  .chip.restriction {
+    border-color: var(--gold-bright);
+    border-style: dashed;
+    position: relative;
+  }
+  .chip.restriction::before {
+    content: '★ ';
+    color: var(--gold-bright);
+  }
+
+  /* Chip bloqué (limite atteinte) */
+  .chip.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+    text-decoration: line-through;
+    text-decoration-color: rgba(168, 50, 50, 0.6);
+  }
+  .chip.disabled:hover {
+    border-color: var(--border);
+    color: var(--parchment-dark);
+  }
+
+  /* Compteur de limites */
+  .limit-counter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(184, 137, 58, 0.08);
+    border: 1px solid var(--gold);
+    border-radius: 3px;
+    padding: 0.5rem 0.8rem;
+    margin-bottom: 0.6rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .limit-counter .label {
+    color: var(--parchment-dark);
+  }
+  .limit-counter .count {
+    color: var(--gold-bright);
+    font-weight: 600;
+  }
+  .limit-counter.full {
+    background: rgba(168, 50, 50, 0.12);
+    border-color: var(--crimson-bright);
+  }
+  .limit-counter.full .count {
+    color: var(--crimson-bright);
+  }
+
+  /* Compteur global (plus gros) */
+  .limit-global {
+    background: linear-gradient(135deg, rgba(184, 137, 58, 0.15), rgba(107, 31, 31, 0.05));
+    border: 1px solid var(--gold-bright);
+    border-radius: 4px;
+    padding: 0.7rem 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: var(--parchment-light);
+  }
+  .limit-global strong {
+    color: var(--gold-bright);
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+  .limit-global.full {
+    background: rgba(168, 50, 50, 0.15);
+    border-color: var(--crimson-bright);
+  }
+  .limit-global.full strong {
+    color: var(--crimson-bright);
+  }
+
+  .chip-input {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    margin-top: 0.3rem;
+  }
+  .chip-input input {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.95rem;
+  }
+  .chip-input button {
+    padding: 0.5rem 0.9rem;
+    background: var(--gold-deep);
+    border: 1px solid var(--gold-bright);
+    color: var(--parchment-light);
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-radius: 3px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .chip-input button:active { transform: scale(0.97); }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem;
+  }
+  @media (max-width: 380px) {
+    .stats-row { grid-template-columns: 1fr; }
+  }
+
+  /* PROGRESSION BOX */
+  .progression-box {
+    background: linear-gradient(135deg, rgba(184, 137, 58, 0.12), rgba(107, 31, 31, 0.05));
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .progression-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gold-bright);
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .progression-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .progression-list li {
+    padding: 0.4rem 0;
+    color: var(--parchment-light);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    border-bottom: 1px dashed rgba(184, 137, 58, 0.2);
+  }
+  .progression-list li:last-child { border-bottom: none; }
+
+  .progression-list li.locked {
+    color: var(--parchment-dark);
+    opacity: 0.45;
+  }
+
+  .lune-badge {
+    background: var(--gold-deep);
+    color: var(--parchment-light);
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    flex-shrink: 0;
+    min-width: 48px;
+    text-align: center;
+  }
+
+  .progression-list li.locked .lune-badge {
+    background: rgba(138, 100, 32, 0.3);
+  }
+
+  .counter {
+    background: rgba(212, 167, 84, 0.12);
+    border: 1px solid var(--gold-bright);
+    border-radius: 4px;
+    padding: 0.6rem 0.9rem;
+    margin: 0.5rem 0;
+    text-align: center;
+    color: var(--gold-bright);
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .counter strong {
+    font-size: 1.4rem;
+    color: var(--parchment-light);
+  }
+
+  .spell-group {
+    margin-bottom: 1rem;
+  }
+  .spell-group-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .spell-group-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--gold-deep), transparent);
+  }
+
+  .class-prompt {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    color: var(--parchment-dark);
+    font-style: italic;
+    border: 1px dashed var(--border);
+    border-radius: 4px;
+  }
+
+  .info-banner {
+    padding: 0.7rem 0.9rem;
+    background: rgba(184, 137, 58, 0.08);
+    border-left: 2px solid var(--gold);
+    border-radius: 0 3px 3px 0;
+    font-size: 0.88rem;
+    color: var(--parchment-light);
+    margin-bottom: 0.8rem;
+  }
+  .info-banner strong { color: var(--gold-bright); }
+
+  /* ACTION BAR */
+  .action-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    padding: 0.9rem 1rem calc(0.9rem + env(safe-area-inset-bottom));
+    background: linear-gradient(to top, var(--ink), rgba(26, 15, 8, 0.92));
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--border-strong);
+    z-index: 20;
+    display: flex;
+    gap: 0.6rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .btn {
+    padding: 0.95rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex: 1;
+  }
+
+  .btn-primary {
+    background: linear-gradient(180deg, var(--gold), var(--gold-deep));
+    color: var(--ink);
+    border: 1px solid var(--gold-bright);
+    box-shadow: 0 2px 8px rgba(184, 137, 58, 0.3);
+    flex: 2;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--parchment-dark);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:active { background: rgba(244, 233, 208, 0.05); }
+
+  .toast {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: linear-gradient(135deg, var(--ink-soft), var(--ink));
+    border: 1px solid var(--gold-bright);
+    padding: 1.5rem 2rem;
+    border-radius: 6px;
+    box-shadow: 0 10px 40px var(--shadow), 0 0 30px rgba(184, 137, 58, 0.2);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s;
+    text-align: center;
+    max-width: 90vw;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); pointer-events: auto; }
+  .toast-icon { font-size: 2rem; color: var(--gold-bright); margin-bottom: 0.5rem; }
+  .toast-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gold-bright);
+    margin-bottom: 0.3rem;
+  }
+  .toast-msg { color: var(--parchment-light); font-size: 0.95rem; }
+  .toast.error { border-color: var(--crimson-bright); }
+  .toast.error .toast-icon, .toast.error .toast-title { color: var(--crimson-bright); }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 10, 5, 0.85);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: linear-gradient(135deg, var(--ink-soft), var(--ink));
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    padding: 1.5rem 1.3rem;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal h2 {
+    font-family: 'UnifrakturCook', cursive;
+    color: var(--gold-bright);
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  .modal h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    margin: 1rem 0 0.5rem;
+  }
+  .modal p {
+    font-size: 0.95rem;
+    color: var(--parchment-light);
+    margin-bottom: 0.7rem;
+    line-height: 1.5;
+  }
+  .modal code {
+    background: rgba(184, 137, 58, 0.15);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    color: var(--gold-bright);
+  }
+  .modal-close {
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .scroll-top {
+    position: fixed;
+    bottom: 5rem;
+    right: 1rem;
+    width: 42px; height: 42px;
+    background: var(--gold-deep);
+    color: var(--parchment-light);
+    border: 1px solid var(--gold-bright);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 15;
+    font-size: 1.2rem;
+  }
+  .scroll-top.visible { opacity: 0.85; pointer-events: auto; }
+
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <header>
+    <div class="logo">Fléau</div>
+    <div class="subtitle">Grandeur Nature</div>
+    <div class="ornament">✦</div>
+    <div class="form-type">Fiche Figurant</div>
+    <button class="config-btn" onclick="openSetup()" aria-label="Configuration">⚙</button>
+  </header>
+
+  <main>
+
+    <div class="intro">
+      Fiche pour figurant. Les <strong>habiletés et sorts</strong> s'affichent automatiquement selon la classe, les lunes et le peuple, conformément au <strong>Livre des Règles 2024</strong>.
+    </div>
+
+    <form id="form-figurant" onsubmit="event.preventDefault(); saveForm();">
+
+      <!-- 1. IDENTITÉ -->
+      <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+          <div class="section-num">1</div>
+          <div class="section-title">Identité</div>
+          <div class="chevron">▼</div>
+        </div>
+        <div class="section-body">
+          <div class="field">
+            <label class="field-label">Nom du figurant (comédien)</label>
+            <input type="text" name="nom_figurant" placeholder="Nom de la personne qui incarne le rôle">
+          </div>
+
+          <div class="field">
+            <label class="field-label">Nom du personnage</label>
+            <input type="text" name="nom_personnage" placeholder="Ex: TEST Norrianiss">
+          </div>
+
+          <div class="field">
+            <label class="field-label">Race</label>
+            <select name="race" id="race" onchange="updateProgression()"></select>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Faction / Peuple</label>
+            <select name="faction" id="faction" onchange="updateProgression()"></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. ATTITUDE -->
+      <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+          <div class="section-num">2</div>
+          <div class="section-title">Attitude</div>
+          <div class="chevron">▼</div>
+        </div>
+        <div class="section-body">
+          <div class="field-hint">Choisis l'attitude principale, ou plusieurs si pertinent.</div>
+          <div class="field">
+            <div class="chips" data-name="attitude" data-multi="true"></div>
+            <div class="chip-input">
+              <input type="text" placeholder="Autre attitude…">
+              <button type="button" onclick="addCustomChip(this, 'attitude')">+ Ajouter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. STATISTIQUES -->
+      <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+          <div class="section-num">3</div>
+          <div class="section-title">Statistiques</div>
+          <div class="chevron">▼</div>
+        </div>
+        <div class="section-body">
+          <div class="stats-row">
+            <div class="field">
+              <label class="field-label">Points de vie</label>
+              <input type="number" name="pv" placeholder="Ex: 5" min="0">
+            </div>
+            <div class="field">
+              <label class="field-label">Points d'armure</label>
+              <input type="number" name="pa" placeholder="Ex: 2" min="0">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. CLASSE & PROGRESSION -->
+      <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+          <div class="section-num">4</div>
+          <div class="section-title">Classe &amp; Progression</div>
+          <div class="chevron">▼</div>
+        </div>
+        <div class="section-body">
+          <div class="stats-row">
+            <div class="field">
+              <label class="field-label">Classe de base</label>
+              <select name="classe" id="classe" onchange="updateProgression()">
+                <option value="">— Aucune —</option>
+                <option value="Guerrier">Guerrier</option>
+                <option value="Mage">Mage</option>
+                <option value="Prêtre">Prêtre</option>
+                <option value="Fée">Classe raciale Fée</option>
+                <option value="Ogre">Classe raciale Ogre</option>
+                <option value="Skaven">Skaven (Ratkins)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="field-label">Nombre de lunes</label>
+              <input type="number" name="lunes" id="lunes" placeholder="Ex: 6" min="0" max="50" oninput="updateProgression()">
+            </div>
+          </div>
+
+          <div id="progression"></div>
+        </div>
+      </div>
+
+      <!-- 5. APTITUDES & SORTS (dynamique) -->
+      <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+          <div class="section-num">5</div>
+          <div class="section-title">Aptitudes &amp; Sorts</div>
+          <div class="chevron">▼</div>
+        </div>
+        <div class="section-body">
+          <div id="capacitesContainer">
+            <div class="class-prompt">
+              Sélectionne d'abord une <strong style="color:var(--gold-bright)">classe de base</strong> et des <strong style="color:var(--gold-bright)">lunes</strong> à la section précédente.
+            </div>
+          </div>
+
+          <div class="field" style="margin-top:1rem;">
+            <label class="field-label">Notes / Aptitudes additionnelles</label>
+            <textarea name="aptitudes_libre" rows="3" placeholder="Aptitudes hors classe, immunités raciales, capacités spéciales…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. NOTES -->
+      <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+          <div class="section-num">6</div>
+          <div class="section-title">Notes</div>
+          <div class="chevron">▼</div>
+        </div>
+        <div class="section-body">
+          <div class="field">
+            <textarea name="notes" rows="5" placeholder="Toute autre information utile pour le figurant…"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </form>
+
+  </main>
+
+  <div class="action-bar">
+    <button class="btn btn-secondary" onclick="resetForm()">Effacer</button>
+    <button class="btn btn-primary" id="save-btn" onclick="saveForm()">Enregistrer ↓</button>
+  </div>
+
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</button>
+
+  <div class="toast" id="toast">
+    <div class="toast-icon" id="toast-icon">✓</div>
+    <div class="toast-title" id="toast-title">Enregistré</div>
+    <div class="toast-msg" id="toast-msg">La fiche a été envoyée dans Google Drive.</div>
+  </div>
+
+  <div class="modal-overlay" id="modal" onclick="if(event.target===this) closeSetup()">
+    <div class="modal">
+      <h2>Configuration</h2>
+      <h3>URL Google Apps Script</h3>
+      <p>Colle ici l'URL de déploiement Web App qui sauvegardera les fiches dans le dossier Drive « Fiches Figurants ».</p>
+      <input type="text" id="gas-url" placeholder="https://script.google.com/macros/s/.../exec" style="margin-bottom: 0.8rem;">
+      <button class="btn btn-secondary" onclick="saveGasUrl()" style="margin-bottom: 1rem;">Sauvegarder URL</button>
+      <h3>Mode hors ligne</h3>
+      <p>Sans configuration, le bouton « Enregistrer » téléchargera la fiche en .doc directement sur ton appareil.</p>
+      <button class="btn btn-primary modal-close" onclick="closeSetup()">Fermer</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   DONNÉES — Univers de Fléau (Livre des Règles 2024)
+   ============================================================ */
+
+const DATA = {
+  races: [
+    'Humain', 'Numénoréen', 'Elfe', 'Elfe Noir', 'Moriquendi', 'Nain', 'Hobbit', 'Fée',
+    'Ratkins', 'Ogre', 'Gobelin', 'Orque Vert',
+    'Mort-Vivant', 'Demi-race', 'Autre / À déterminer'
+  ],
+
+  factions: [
+    'Aucune / Indépendant',
+    'Pandor', 'Lossado', 'Eldoriath', 'Numénor', 'Moriquendi', 'Peuple des Sables',
+    'Nazzakri', 'Orques (Horde du Chaos)', 'Elfes Noirs', 'Oz', 'Khazad',
+    'Autre'
+  ],
+
+  attitude: [
+    'Hostile', 'Neutre', 'Peureux', 'Servile',
+    'Agressif', 'Curieux', 'Méfiant', 'Joyeux',
+    'Mystérieux', 'Distant', 'Provocateur', 'Soumis'
+  ],
+
+  // Habiletés Guerrières (page 26 du Livre des Règles 2024)
+  habiletes_guerrier: [
+    '+2 PV de base (max 1)',
+    'Résistance à une flèche (max 2)',
+    'Immunité à frayeur',
+    'Combat à l\'aveugle',
+    'Intimidation (crie pour infliger frayeur)',
+    '+3 PA torse uniquement (max 1)',
+    'Bris de bouclier (max 1)',
+    'Résistance à un bris de bouclier',
+    'Désarçonner (max 1)',
+    'Poigne de fer (résiste à désarçonner)'
+  ],
+
+  // ====== SORTS DE MAGE (Arcane/Essence) — par niveau, du Livre des Règles ======
+  sorts_mage_faibles: [
+    'Amitié', 'Asphyxie', 'Aveuglement', 'Chant', 'Communication avec les morts',
+    'Conservation d\'un corps', 'Danse', 'Déshydratation', 'Détection de la magie',
+    'Ébriété', 'Enracinement', 'Flamme continuelle', 'Glisse', 'Incinération',
+    'Joie', 'Mot de commandement', 'Pétrification', 'Rage', 'Retour à la terre',
+    'Sable mouvant', 'Silence', 'Sommeil', 'Vision spectrale'
+  ],
+
+  sorts_mage_intermediaires: [
+    'Apathie', 'Armes brûlantes', 'Attraction végétale', 'Cercle de protection',
+    'Charme', 'Commandement', 'Désarmure', 'Don de vie', 'Douleur', 'Folie',
+    'Frayeur', 'Main électrique', 'Main de feu', 'Main vampirique', 'Paralysie',
+    'Protection végétale', 'Retour en enfance', 'Statue', 'Tempête de vent',
+    'Tempête de sable', 'Tsunami', 'Tremblement de terre', 'Vieillissement'
+  ],
+
+  sorts_mage_majeurs: [
+    'Arrêt du temps', 'Blessure critique', 'Boule de feu', 'Cristallisation',
+    'Désintégration',
+    {nom: 'Disque lunaire', restriction: {peuple: 'Lossado'}},
+    {nom: 'Disque solaire', restriction: {peuple: 'Pandor'}},
+    'Dissipation de la magie', 'Domination', 'Étoile filante', 'Étranglement',
+    'Flèche magique', 'Foudre', 'Glaciation', 'Missile magique', 'Mort',
+    'Orbe d\'acide', 'Oubli', 'Répulsion', 'Transport dans le plan des ombres'
+  ],
+
+  // ====== SORTS DE PRÊTRE par divinité (pages 84-89) ======
+  divinites_pretre: [
+    'Luminis', 'Obscur',
+    'Feyris (Kami — Eau)', 'Hayabusa (Kami — Air)', 'Kitsune (Kami — Terre)',
+    'Daisuke (Kami — Feu)', 'Zhanshi (Kami — Métal)', 'Yurei (Kami — Éther)',
+    'Arianne (Sainte Triade)', 'Eireiné (Sainte Triade)', 'Thémis (Sainte Triade)',
+    'Anthares (Cercle Noir)', 'Darkness (Cercle Noir)', 'Simorgh (Cercle Noir)',
+    'Menades (Cercle Noir)', 'Crom (Cercle Noir)', 'Vélès (Cercle Noir)',
+    'Manwe (Valar)', 'Varda (Valar)', 'Aulë (Valar)', 'Oromë (Valar)',
+    'Ulmo (Valar)', 'Namo (Valar)', 'Yavannah (Valar)', 'Vana (Valar)',
+    'Irmo (Valar)', 'Vairë (Valar)', 'Nessa (Valar)', 'Tulkas (Valar)',
+    'Estë (Valar)', 'Nienna (Valar)',
+    'Maât (Ishra)', 'Rê/Rhâ (Ishra)', 'Osiris (Ishra)', 'Bastet (Ishra)',
+    'Horus (Ishra)', 'Anubis (Ishra)', 'Sekhmet (Ishra)',
+    'Isis (Ishra)', 'Apophis (Ishra)', 'Soutek (Ishra)',
+    'Chamanisme (Tribu des Ancêtres)',
+    'Araushnée (Souterrains)',
+    'Seth', 'Points cardinaux d\'Oz', 'Autre'
+  ],
+
+  // ====== MAPPING RACE -> DIVINITÉS ACCESSIBLES ======
+  // Liste des divinités qu'une race peut adorer (selon ton univers Fléau)
+  divinites_par_race: {
+    'Humain': null, // null = toutes les divinités
+    'Elfe': [
+      'Luminis', 'Obscur',
+      'Manwe (Valar)', 'Varda (Valar)', 'Aulë (Valar)', 'Oromë (Valar)',
+      'Ulmo (Valar)', 'Namo (Valar)', 'Yavannah (Valar)', 'Vana (Valar)',
+      'Irmo (Valar)', 'Vairë (Valar)', 'Nessa (Valar)', 'Tulkas (Valar)',
+      'Estë (Valar)', 'Nienna (Valar)'
+    ],
+    'Elfe Noir': ['Araushnée (Souterrains)'],
+    'Moriquendi': ['Araushnée (Souterrains)'],
+    'Nain': [
+      'Manwe (Valar)', 'Varda (Valar)', 'Aulë (Valar)', 'Oromë (Valar)',
+      'Ulmo (Valar)', 'Namo (Valar)', 'Yavannah (Valar)', 'Vana (Valar)',
+      'Irmo (Valar)', 'Vairë (Valar)', 'Nessa (Valar)', 'Tulkas (Valar)',
+      'Estë (Valar)', 'Nienna (Valar)'
+    ],
+    'Numénoréen': [
+      'Manwe (Valar)', 'Varda (Valar)', 'Aulë (Valar)', 'Oromë (Valar)',
+      'Ulmo (Valar)', 'Namo (Valar)', 'Yavannah (Valar)', 'Vana (Valar)',
+      'Irmo (Valar)', 'Vairë (Valar)', 'Nessa (Valar)', 'Tulkas (Valar)',
+      'Estë (Valar)', 'Nienna (Valar)'
+    ],
+    'Hobbit': [
+      'Luminis',
+      'Yavannah (Valar)', 'Vana (Valar)', 'Estë (Valar)'
+    ],
+    'Fée': [
+      'Vana (Valar)', 'Yavannah (Valar)', 'Oromë (Valar)', 'Nienna (Valar)'
+    ],
+    'Ratkins': [
+      'Anthares (Cercle Noir)', 'Darkness (Cercle Noir)', 'Simorgh (Cercle Noir)',
+      'Menades (Cercle Noir)', 'Crom (Cercle Noir)', 'Vélès (Cercle Noir)',
+      'Araushnée (Souterrains)'
+    ],
+    'Ogre': [
+      'Crom (Cercle Noir)', 'Tulkas (Valar)',
+      'Anthares (Cercle Noir)', 'Darkness (Cercle Noir)', 'Simorgh (Cercle Noir)',
+      'Menades (Cercle Noir)', 'Vélès (Cercle Noir)'
+    ],
+    'Gobelin': [
+      'Anthares (Cercle Noir)', 'Darkness (Cercle Noir)', 'Simorgh (Cercle Noir)',
+      'Menades (Cercle Noir)', 'Crom (Cercle Noir)', 'Vélès (Cercle Noir)',
+      'Araushnée (Souterrains)'
+    ],
+    'Orque Vert': [
+      'Anthares (Cercle Noir)', 'Darkness (Cercle Noir)', 'Simorgh (Cercle Noir)',
+      'Menades (Cercle Noir)', 'Crom (Cercle Noir)', 'Vélès (Cercle Noir)'
+    ],
+    'Mort-Vivant': [
+      'Simorgh (Cercle Noir)', 'Apophis (Ishra)', 'Anubis (Ishra)'
+    ],
+    'Demi-race': null, // toutes
+    'Autre / À déterminer': null // toutes
+  },
+
+  // ====== CLASSIFICATION DES SORTS DE PRÊTRE PAR NIVEAU ======
+  // Selon le Livre des Règles 2024
+  // Permet de filtrer les sorts disponibles selon les lunes du prêtre
+  sorts_pretre_niveaux: {
+    faibles: [
+      'Amitié', 'Animation d\'un zombie', 'Apaisement', 'Asphyxie', 'Aveuglement',
+      'Chant', 'Communication avec les morts', 'Conservation d\'un corps', 'Courage',
+      'Danse', 'Déshydratation', 'Détection du bien ou du mal', 'Ébriété',
+      'Enracinement', 'Flamme continuelle', 'Guérison', 'Guérison des maladies',
+      'Incinération', 'Joie', 'Mot de commandement', 'Neutralisation du poison',
+      'Parler avec les animaux', 'Pétrification', 'Protection contre la mort',
+      'Rage', 'Reconstruction', 'Retour à la terre', 'Sable mouvant', 'Silence',
+      'Sommeil', 'Vision spectrale', 'Vision véritable'
+    ],
+    intermediaires: [
+      'Animation d\'un squelette', 'Apathie', 'Armes brûlantes', 'Attraction végétale',
+      'Blasphème', 'Cercle de protection', 'Charme', 'Commandement', 'Contagion',
+      'Contrôle des morts-vivants', 'Demande divine', 'Désarmure', 'Détection de la vérité',
+      'Don de vie', 'Douleur', 'Frayeur', 'Main électrique', 'Main de feu',
+      'Main vampirique', 'Marteau divin', 'Mot de foi', 'Paralysie',
+      'Protection végétale', 'Putréfaction', 'Régénération d\'un membre',
+      'Réincarnation', 'Retour en enfance', 'Statue', 'Tempête de vent',
+      'Tempête de sable', 'Tsunami', 'Tremblement de terre', 'Vade Rétro',
+      'Antée Rétro', 'Vieillissement'
+    ],
+    majeurs: [
+      'Arrêt du temps', 'Blessure critique', 'Boule de feu', 'Châtiment',
+      'Contrôle des créatures des anciens dieux',
+      {nom: 'Disque lunaire', restriction: {peuple: 'Lossado'}},
+      {nom: 'Disque solaire', restriction: {peuple: 'Pandor'}},
+      'Divination', 'Domination', 'Étoile filante', 'Étranglement',
+      'Flèche magique', 'Foudre',
+      'Foudre maudite (affecte seulement les entités du bien)',
+      'Foudre sacrée (affecte seulement les créatures maudites)',
+      'Glaciation', 'Mort', 'Orbe d\'acide', 'Oubli', 'Purification',
+      'Rage céleste', 'Rage infernale', 'Résurrection', 'Sanctuaire',
+      'Transport dans le plan des ombres', 'Vérité absolue'
+    ]
+  },
+
+  sorts_pretre_par_divinite: {
+    'Luminis': ['Apaisement', 'Amitié', 'Courage', 'Détection de la vérité', 'Foudre Sacrée', 'Guérison', 'Guérison des maladies', 'Joie', 'Main de feu', 'Marteau Divin', 'Mot de foi', 'Protection contre la mort', 'Régénération d\'un membre', 'Résurrection', 'Neutralisation du poison', 'Vision spectrale'],
+    'Obscur': ['Animation d\'un squelette', 'Apaisement', 'Communication avec les Morts', 'Courage', 'Détection de la vérité', 'Frayeur', 'Guérison', 'Guérison des maladies', 'Neutralisation du poison', 'Mot de foi', 'Protection contre la mort', 'Purification', 'Régénération d\'un membre', 'Résurrection', 'Vision spectrale'],
+    'Feyris (Kami — Eau)': ['1 sort relié à l\'élément de l\'Eau (à choisir avec animation)'],
+    'Hayabusa (Kami — Air)': ['1 sort relié à l\'élément de l\'Air (à choisir avec animation)'],
+    'Kitsune (Kami — Terre)': ['1 sort relié à l\'élément de la Terre (à choisir avec animation)'],
+    'Daisuke (Kami — Feu)': ['1 sort relié à l\'élément du Feu (à choisir avec animation)'],
+    'Zhanshi (Kami — Métal)': ['1 sort relié à l\'élément du Métal (à choisir avec animation)'],
+    'Yurei (Kami — Éther)': ['1 sort relié à l\'élément de l\'éther (à choisir avec animation)'],
+    'Arianne (Sainte Triade)': ['Armes Brûlantes', 'Apaisement', 'Courage', 'Désarmure', 'Guérison', 'Frayeur', 'Résurrection', 'Marteau Divin', 'Rage', 'Rage Céleste'],
+    'Eireiné (Sainte Triade)': ['Apaisement', 'Cercle De Protection', 'Guérison', 'Guérison Des Maladies', 'Neutralisation du poison', 'Protection Contre La Mort', 'Régénération d\'un membre', 'Résurrection', 'Sommeil'],
+    'Thémis (Sainte Triade)': ['Courage', 'Détection de la vérité', 'Mot de Commandement', 'Guérison', 'Apaisement', 'Mot de foi', 'Résurrection', 'Silence', 'Marteau divin', 'Vision spectrale'],
+    'Anthares (Cercle Noir)': ['Arme brûlante', 'Aveuglement', 'Blasphème', 'Boule de feu', 'Étranglement', 'Guérison', 'Main de feu', 'Mot de commandement', 'Rage', 'Résurrection'],
+    'Darkness (Cercle Noir)': ['Apathie', 'Boule de feu', 'Blasphème', 'Charme', 'Danse', 'Domination', 'Ébriété', 'Foudre Maudite', 'Flamme continuelle', 'Guérison', 'Main de feu', 'Silence'],
+    'Simorgh (Cercle Noir)': ['Animation d\'un Squelette', 'Animation d\'un Zombie', 'Communication avec les morts', 'Main Vampirique', 'Protection contre la Mort', 'Reconstruction', 'Conservation d\'un corps', 'Mort', 'Vision spectrale'],
+    'Menades (Cercle Noir)': ['Animation d\'un zombie', 'Contagion', 'Ébriété', 'Douleur', 'Paralysie', 'Putréfaction', 'Reconstruction', 'Frayeur', 'Neutralisation du poison', 'Orbe d\'Acide'],
+    'Crom (Cercle Noir)': ['Armes Brûlantes', 'Courage', 'Désarmure', 'Frayeur', 'Guérison', 'Main de Feu', 'Marteau Divin', 'Neutralisation du Poison', 'Rage', 'Rage Infernale', 'Résurrection'],
+    'Vélès (Cercle Noir)': ['Aveuglement', 'Charme', 'Châtiment', 'Danse', 'Demande Divine', 'Détection de la vérité', 'Divination', 'Frayeur', 'Guérison', 'Neutralisation du poison', 'Oublie', 'Parler avec les animaux'],
+    'Manwe (Valar)': ['Courage', 'Flamme Continuelle', 'Guérison', 'Vision spectrale', 'Tempête de vent', 'Main électrique', 'Foudre', 'Mot de commandement', 'Mot de foi'],
+    'Varda (Valar)': ['Cercle de protection', 'Étoile filante', 'Guérison', 'Guérison des maladies', 'Mot de foi', 'Protection contre la mort', 'Résurrection', 'Sommeil', 'Vision spectrale'],
+    'Aulë (Valar)': ['Armes Brûlantes', 'Incinération', 'Désarmure', 'Flamme Continuelle', 'Guérison', 'Mains de feu', 'Marteau Divin', 'Pétrification', 'Régénération d\'un membre', 'Boule de feu'],
+    'Oromë (Valar)': ['Apaisement', 'Attraction végétal', 'Enracinement', 'Flèche Magique', 'Guérison', 'Parler avec les animaux', 'Protection végétale', 'Neutralisation du poison', 'Régénération', 'Sommeil'],
+    'Ulmo (Valar)': ['Asphyxie', 'Cercle de protection', 'Courage', 'Déshydratation', 'Guérison', 'Rage', 'Glaciation', 'Régénération d\'un membre', 'Tsunami'],
+    'Namo (Valar)': ['Vieillissement', 'Protection contre la mort', 'Communication avec les morts', 'Mort', 'Vision spectrale', 'Silence', 'Demande Divine', 'Apathie', 'Retour à la terre', 'Cercle de Protection'],
+    'Yavannah (Valar)': ['Apaisement', 'Amitié', 'Guérison', 'Régénération d\'un membre', 'Résurrection', 'Sommeil', 'Enracinement', 'Attraction Végétal', 'Guérison des maladies', 'Protection végétal'],
+    'Vana (Valar)': ['Amitié', 'Danse', 'Chant', 'Charme', 'Guérison', 'Parler avec les animaux', 'Régénération d\'un membre', 'Résurrection', 'Retour en enfance'],
+    'Irmo (Valar)': ['Demande Divine', 'Divination', 'Guérison', 'Oublie', 'Protection contre la mort', 'Sommeil', 'Vieillissement', 'Vision spectrale', 'Retour en enfance'],
+    'Vairë (Valar)': ['Arrêt du temps', 'Demande Divine', 'Guérison', 'Oublie', 'Statue', 'Protection contre la mort', 'Sommeil', 'Vieillissement', 'Vision spectrale', 'Retour en enfance'],
+    'Nessa (Valar)': ['Armes Brûlantes', 'Courage', 'Danse', 'Guérison', 'Enracinement', 'Neutralisation du poison', 'Marteau Divin', 'Mot de foi', 'Protection contre la mort', 'Régénération d\'un membre'],
+    'Tulkas (Valar)': ['Armes Brûlantes', 'Courage', 'Frayeur', 'Main électrique', 'Marteau Divin', 'Mot de foi', 'Protection contre la mort', 'Blasphème', 'Neutralisation du poison'],
+    'Estë (Valar)': ['Apaisement', 'Guérison', 'Guérison des maladies', 'Neutralisation du poison', 'Protection contre la mort', 'Protection végétal', 'Régénération d\'un membre', 'Résurrection', 'Sommeil'],
+    'Nienna (Valar)': ['Apaisement', 'Joie', 'Guérison', 'Sommeil', 'Enracinement', 'Guérison des maladies', 'Communication avec les morts', 'Déshydratation', 'Réincarnation', 'Châtiment', 'Oublie'],
+    'Maât (Ishra)': ['Apaisement', 'Détection de la vérité', 'Vision véritable', 'Mot de commandement', 'Guérison', 'Neutralisation du poison', 'Résurrection'],
+    'Rê/Rhâ (Ishra)': ['Apaisement', 'Amitié', 'Courage', 'Détection de la vérité', 'Sanctuaire', 'Guérison', 'Guérison des maladies', 'Joie', 'Main de feu', 'Marteau Divin', 'Mot de foi', 'Protection contre la mort', 'Régénération d\'un membre', 'Résurrection', 'Neutralisation du poison', 'Vision spectrale'],
+    'Osiris (Ishra)': ['Protection contre la mort', 'Guérison', 'Désarmure', 'Retour à la terre', 'Mort', 'Réincarnation', 'Sable mouvant', 'Détection de la vérité', 'Domination', 'Vision spectrale'],
+    'Bastet (Ishra)': ['Vision spectrale', 'Aveuglement', 'Protection contre la mort', 'Déshydratation', 'Tempête de Sable', 'Rage', 'Charme', 'Châtiment', 'Paralysie'],
+    'Horus (Ishra)': ['Rage', 'Courage', 'Mot de commandement', 'Arme Brûlante', 'Désarmure', 'Neutralisation du poison', 'Vision spectrale', 'Guérison', 'Frayeur', 'Blessure critique'],
+    'Anubis (Ishra)': ['Guérison', 'Vision spectrale', 'Conservation d\'un corps', 'Reconstruction', 'Vieillissement', 'Putréfaction', 'Paralysie', 'Étranglement', 'Transport dans le plan des ombres', 'Animation d\'un squelette'],
+    'Sekhmet (Ishra)': ['Rage', 'Courage', 'Mot de commandement', 'Vision Véritable', 'Guérison', 'Rajeunissement', 'Protection contre la mort', 'Boule de Feu'],
+    'Isis (Ishra)': ['Apathie', 'Courage', 'Guérison', 'Apaisement', 'Don de vie', 'Cercle de Protection', 'Régénération', 'Oublie', 'Résurrection', 'Guérison des maladies'],
+    'Apophis (Ishra)': ['Rage', 'Mot de commandement', 'Transport dans le plan des ombres', 'Étranglement', 'Mort', 'Main vampirique', 'Animation d\'un Squelette', 'Blasphème', 'Communication avec les morts', 'Reconstruction', 'Conservation d\'un corps', 'Vision spectrale'],
+    'Soutek (Ishra)': ['Guérison', 'Détection de la vérité', 'Vision Véritable', 'Flamme continuelle', 'Mot de foi', 'Blasphème', 'Cercle de protection', 'Marteau divin', 'Vérité absolue', 'Résurrection'],
+    'Chamanisme (Tribu des Ancêtres)': ['Communication avec les morts', 'Ébriété', 'Guérison', 'Rage', 'Résurrection', 'Armes Brûlantes', 'Frayeur', 'Main de Feu', 'Foudre', 'Vision spectrale', 'Douleur', 'Neutralisation du poison', 'Domination', 'Blasphème', 'Boule de feu', 'Pétrification', 'Parler avec les animaux', 'Réincarnation', 'Tempête de vent', 'Tremblement de Terre', 'Tsunami'],
+    'Aranaé (Souterrains)': ['(Divinité disparue — voir animation)'],
+    'Araushnée (Souterrains)': ['Arme Brûlante', 'Charme', 'Blasphème', 'Paralysie', 'Neutralisation du poison', 'Guérison', 'Main de feu', 'Rage', 'Aveuglement', 'Étranglement', 'Danse', 'Domination'],
+    'Loth (Souterrains)': ['(Divinité disparue — voir animation)'],
+    'Seth': ['(Selon la forme adoptée — voir animation)'],
+    'Points cardinaux d\'Oz': ['(À découvrir en jeu — voir animation)'],
+    'Autre': ['(Voir le Livre des Règles ou l\'animation)']
+  },
+
+  // Progression par lune (sans la 16e lune comme demandé)
+  progression: {
+    'Guerrier': [
+      {lune: 1, gain: '+1 PV & 1 habileté guerrière'},
+      {lune: 3, gain: '+1 PV & 1 habileté guerrière'},
+      {lune: 6, gain: '+1 PV & 1 habileté guerrière'},
+      {lune: 10, gain: '+1 PV & 1 habileté guerrière'},
+      {lune: 15, gain: '+1 PV & 1 habileté guerrière'}
+    ],
+    'Mage': [
+      {lune: 1, gain: 'Sort Faible + Détection de la magie'},
+      {lune: 3, gain: 'Sort Faible'},
+      {lune: 6, gain: 'Sort Intermédiaire'},
+      {lune: 10, gain: 'Sort Intermédiaire'},
+      {lune: 15, gain: 'Sort Majeur'}
+    ],
+    'Prêtre': [
+      {lune: 1, gain: 'Sort Faible divin + Détection bien/mal'},
+      {lune: 3, gain: 'Sort Faible divin'},
+      {lune: 6, gain: 'Sort Intermédiaire divin'},
+      {lune: 10, gain: 'Sort Intermédiaire divin + (Vade Rétro / Antée Rétro / Contrôle morts-vivants)'},
+      {lune: 15, gain: 'Sort Majeur divin'}
+    ],
+    'Fée': [
+      {lune: 1, gain: 'Pouvoir de classe Fée'},
+      {lune: 3, gain: 'Pouvoir de classe Fée'},
+      {lune: 6, gain: 'Pouvoir de classe Fée'},
+      {lune: 9, gain: 'Pouvoir de classe Fée'},
+      {lune: 12, gain: 'Pouvoir de classe Fée (max base)'}
+    ],
+    'Ogre': [
+      {lune: 1, gain: 'Pouvoir de classe Ogre'},
+      {lune: 3, gain: 'Faim de l\'ogre 1 (+1 PV pour 1 corps dévoré)'},
+      {lune: 6, gain: 'Pouvoir de classe Ogre'},
+      {lune: 9, gain: 'Faim de l\'ogre 2 (+2 PV pour 2 corps)'},
+      {lune: 12, gain: 'Faim de l\'ogre 3'},
+      {lune: 20, gain: 'Faim de l\'ogre 4-5 (max +5 PV)'}
+    ],
+    'Skaven': [
+      {lune: 1, gain: 'Pouvoir de classe Skaven'},
+      {lune: 3, gain: 'Pouvoir de classe Skaven'},
+      {lune: 6, gain: 'Pouvoir de classe Skaven'},
+      {lune: 9, gain: 'Pouvoir de classe Skaven'},
+      {lune: 12, gain: 'Pouvoir de classe Skaven'}
+    ]
+  },
+
+  // ====== LIMITES DE SÉLECTION SELON LA LUNE ======
+  // getLimits(classe, lunes) retourne {global, faibles, intermediaires, majeurs} ou {habiletes}
+  getLimits: function(classe, lunes) {
+    if (classe === 'Guerrier') {
+      // 1 habileté par étape de progression
+      const steps = [1, 3, 6, 10, 15];
+      const count = steps.filter(s => lunes >= s).length;
+      return { habiletes: count };
+    }
+    if (classe === 'Mage' || classe === 'Prêtre') {
+      // Pour mage/prêtre : structure cumulative
+      // L1 = 1 faible, L3 = 2 faibles, L6 = 2f+1i, L10 = 2f+2i, L15 = 2f+2i+1m
+      let f = 0, i = 0, m = 0;
+      if (lunes >= 1) f = 1;
+      if (lunes >= 3) f = 2;
+      if (lunes >= 6) i = 1;
+      if (lunes >= 10) i = 2;
+      if (lunes >= 15) m = 1;
+      return { faibles: f, intermediaires: i, majeurs: m, global: f + i + m };
+    }
+    return null;
+  }
+};
+
+const state = { selections: {} };
+let GAS_URL = '';
+
+/* ============================================================
+   INITIALISATION
+   ============================================================ */
+
+function init() {
+  fillSelect('race', DATA.races, true);
+  fillSelect('faction', DATA.factions, true);
+  fillChips('attitude', DATA.attitude);
+
+  window.addEventListener('scroll', () => {
+    const btn = document.getElementById('scrollTop');
+    if (window.scrollY > 400) btn.classList.add('visible');
+    else btn.classList.remove('visible');
+  });
+}
+
+function fillSelect(id, options, withPlaceholder) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '';
+  if (withPlaceholder) {
+    const opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = '— Choisir —';
+    el.appendChild(opt);
+  }
+  options.forEach(o => {
+    const opt = document.createElement('option');
+    opt.value = o;
+    opt.textContent = o;
+    el.appendChild(opt);
+  });
+}
+
+/**
+ * Remplit un container de chips. Accepte :
+ * - Strings simples : 'Sommeil'
+ * - Objets avec restriction : {nom: 'Disque solaire', restriction: {peuple: 'Pandor'}}
+ * Les sorts à restriction ne s'affichent que si le contexte (peuple/race) match.
+ */
+function fillChips(name, options, context = {}) {
+  const containers = document.querySelectorAll(`.chips[data-name="${name}"]`);
+  containers.forEach(container => {
+    container.innerHTML = '';
+    state.selections[name] = state.selections[name] || [];
+
+    options.forEach(opt => {
+      let label, isRestricted = false;
+
+      if (typeof opt === 'string') {
+        label = opt;
+      } else {
+        // Objet avec restriction
+        label = opt.nom;
+        const restriction = opt.restriction;
+
+        // Vérifier si le contexte permet d'afficher
+        if (restriction.peuple && context.peuple !== restriction.peuple) {
+          return; // Skip — peuple ne match pas
+        }
+        if (restriction.race && context.race !== restriction.race) {
+          return;
+        }
+        isRestricted = true;
+      }
+
+      const chip = document.createElement('div');
+      chip.className = 'chip' + (isRestricted ? ' restriction' : '');
+      chip.textContent = label;
+      chip.dataset.value = label;
+      chip.onclick = () => toggleChip(chip, name);
+
+      // Restaurer sélection si déjà choisi
+      if (state.selections[name].includes(label)) {
+        chip.classList.add('selected');
+      }
+
+      container.appendChild(chip);
+    });
+  });
+}
+
+function toggleChip(chip, name) {
+  const isMulti = chip.parentElement.dataset.multi === 'true';
+  const value = chip.dataset.value;
+  if (!state.selections[name]) state.selections[name] = [];
+
+  if (chip.classList.contains('selected')) {
+    // Déselectionner — toujours permis
+    chip.classList.remove('selected');
+    state.selections[name] = state.selections[name].filter(v => v !== value);
+  } else {
+    // Avant de sélectionner, vérifier la limite (si applicable)
+    if (!canSelectChip(name)) {
+      return; // bloqué — limite atteinte
+    }
+    if (!isMulti) {
+      chip.parentElement.querySelectorAll('.chip.selected').forEach(c => c.classList.remove('selected'));
+      state.selections[name] = [];
+    }
+    chip.classList.add('selected');
+    state.selections[name].push(value);
+  }
+
+  // Après chaque toggle, mettre à jour les compteurs et l'état des chips
+  updateLimitsUI();
+}
+
+/**
+ * Vérifie si on peut sélectionner un chip de plus dans la catégorie `name`.
+ * Retourne true si autorisé, false si limite atteinte.
+ */
+function canSelectChip(name) {
+  const classe = document.getElementById('classe') ? document.getElementById('classe').value : '';
+  const lunes = document.getElementById('lunes') ? parseInt(document.getElementById('lunes').value) || 0 : 0;
+  const limits = DATA.getLimits(classe, lunes);
+  if (!limits) return true; // pas de limite définie
+
+  // Cas spécial : guerrier — limite individuelle sur habiletes_guerrier
+  if (name === 'habiletes_guerrier' && limits.habiletes !== undefined) {
+    const current = (state.selections[name] || []).length;
+    return current < limits.habiletes;
+  }
+
+  // Pour mage et prêtre : on utilise UNIQUEMENT la limite globale
+  // (le scénariste peut choisir n'importe quelle combinaison faibles/intermédiaires/majeurs)
+  const isMageSpell = ['sorts_mage_faibles', 'sorts_mage_intermediaires', 'sorts_mage_majeurs'].includes(name);
+  const isPretreSpell = ['sorts_pretre_faibles', 'sorts_pretre_intermediaires', 'sorts_pretre_majeurs'].includes(name);
+
+  if ((isMageSpell || isPretreSpell) && limits.global !== undefined) {
+    // Calculer le total actuel (toutes catégories de sorts confondues)
+    const prefix = isMageSpell ? 'sorts_mage_' : 'sorts_pretre_';
+    const totalCurrent =
+      (state.selections[prefix + 'faibles'] || []).length +
+      (state.selections[prefix + 'intermediaires'] || []).length +
+      (state.selections[prefix + 'majeurs'] || []).length;
+    return totalCurrent < limits.global;
+  }
+
+  return true;
+}
+
+/**
+ * Met à jour les compteurs visibles et grise les chips non-sélectionnables
+ * quand la limite est atteinte.
+ */
+function updateLimitsUI() {
+  const classe = document.getElementById('classe') ? document.getElementById('classe').value : '';
+  const lunes = document.getElementById('lunes') ? parseInt(document.getElementById('lunes').value) || 0 : 0;
+  const limits = DATA.getLimits(classe, lunes);
+  if (!limits) return;
+
+  // === GUERRIER === (limite individuelle)
+  if (classe === 'Guerrier' && limits.habiletes !== undefined) {
+    const current = (state.selections['habiletes_guerrier'] || []).length;
+    const max = limits.habiletes;
+    const isFull = current >= max;
+
+    const counter = document.getElementById('cnt-habiletes');
+    if (counter) {
+      counter.querySelector('.count').textContent = `${current} / ${max}`;
+      counter.classList.toggle('full', isFull);
+    }
+
+    document.querySelectorAll(`.chips[data-name="habiletes_guerrier"] .chip`).forEach(chip => {
+      if (chip.classList.contains('selected')) {
+        chip.classList.remove('disabled');
+      } else if (isFull) {
+        chip.classList.add('disabled');
+      } else {
+        chip.classList.remove('disabled');
+      }
+    });
+    return;
+  }
+
+  // === MAGE / PRÊTRE === (limite globale uniquement)
+  if (classe === 'Mage' || classe === 'Prêtre') {
+    const prefix = classe === 'Mage' ? 'sorts_mage_' : 'sorts_pretre_';
+    const cFaibles = (state.selections[prefix + 'faibles'] || []).length;
+    const cInter = (state.selections[prefix + 'intermediaires'] || []).length;
+    const cMajeurs = (state.selections[prefix + 'majeurs'] || []).length;
+    const totalCurrent = cFaibles + cInter + cMajeurs;
+    const totalMax = limits.global;
+    const isFull = totalCurrent >= totalMax;
+
+    // Compteur global (avec état "full" pour le blocage)
+    const globalEl = document.getElementById('cnt-global');
+    if (globalEl) {
+      globalEl.querySelector('.global-count').textContent = totalCurrent;
+      globalEl.querySelector('.global-max').textContent = totalMax;
+      globalEl.classList.toggle('full', isFull);
+    }
+
+    // Compteurs informatifs par sous-niveau (juste pour info, pas de blocage)
+    const subCounters = [
+      {id: classe === 'Mage' ? 'cnt-mage-faibles' : 'cnt-pretre-faibles', count: cFaibles},
+      {id: classe === 'Mage' ? 'cnt-mage-inter' : 'cnt-pretre-inter', count: cInter},
+      {id: classe === 'Mage' ? 'cnt-mage-majeurs' : 'cnt-pretre-majeurs', count: cMajeurs}
+    ];
+    subCounters.forEach(sc => {
+      const el = document.getElementById(sc.id);
+      if (el) {
+        // Affiche juste le compteur sans max (informatif)
+        el.querySelector('.count').textContent = `${sc.count} sélectionné${sc.count > 1 ? 's' : ''}`;
+        el.classList.remove('full'); // jamais en rouge — pas de limite
+      }
+    });
+
+    // Blocage : tous les chips non sélectionnés sont grisés si on a atteint le total global
+    const allCategories = [prefix + 'faibles', prefix + 'intermediaires', prefix + 'majeurs'];
+    allCategories.forEach(catName => {
+      document.querySelectorAll(`.chips[data-name="${catName}"] .chip`).forEach(chip => {
+        if (chip.classList.contains('selected')) {
+          chip.classList.remove('disabled');
+        } else if (isFull) {
+          chip.classList.add('disabled');
+        } else {
+          chip.classList.remove('disabled');
+        }
+      });
+    });
+  }
+}
+
+function addCustomChip(btn, name) {
+  const input = btn.parentElement.querySelector('input');
+  const value = input.value.trim();
+  if (!value) return;
+
+  const container = btn.closest('.field').querySelector(`.chips[data-name="${name}"]`);
+  if (!container) return;
+
+  const existing = Array.from(container.querySelectorAll('.chip')).map(c => c.dataset.value.toLowerCase());
+  if (existing.includes(value.toLowerCase())) {
+    input.value = '';
+    return;
+  }
+
+  const chip = document.createElement('div');
+  chip.className = 'chip selected';
+  chip.textContent = value;
+  chip.dataset.value = value;
+  chip.onclick = () => toggleChip(chip, name);
+  container.appendChild(chip);
+
+  if (!state.selections[name]) state.selections[name] = [];
+  const isMulti = container.dataset.multi === 'true';
+  if (!isMulti) {
+    container.querySelectorAll('.chip.selected').forEach(c => {
+      if (c !== chip) c.classList.remove('selected');
+    });
+    state.selections[name] = [];
+  }
+  state.selections[name].push(value);
+  input.value = '';
+}
+
+function toggleSection(header) {
+  header.parentElement.classList.toggle('collapsed');
+}
+
+/* ============================================================
+   PROGRESSION DYNAMIQUE
+   ============================================================ */
+
+function updateProgression() {
+  const classe = document.getElementById('classe').value;
+  const lunesInput = document.getElementById('lunes').value;
+  const lunes = parseInt(lunesInput) || 0;
+  const peuple = document.getElementById('faction').value;
+  const race = document.getElementById('race').value;
+
+  const progDiv = document.getElementById('progression');
+  const capDiv = document.getElementById('capacitesContainer');
+
+  if (!classe) {
+    progDiv.innerHTML = '';
+    capDiv.innerHTML = '<div class="class-prompt">Sélectionne d\'abord une <strong style="color:var(--gold-bright)">classe de base</strong> et des <strong style="color:var(--gold-bright)">lunes</strong> à la section précédente.</div>';
+    return;
+  }
+
+  const prog = DATA.progression[classe] || [];
+
+  // Affichage progression
+  let progHtml = `
+    <div class="progression-box">
+      <div class="progression-title">⚡ Progression débloquée</div>
+      <ul class="progression-list">
+  `;
+
+  let unlockedSteps = 0;
+  prog.forEach(step => {
+    const unlocked = lunes >= step.lune;
+    if (unlocked) unlockedSteps++;
+    progHtml += `
+      <li class="${unlocked ? 'unlocked' : 'locked'}">
+        <span class="lune-badge">L ${step.lune}</span>
+        <span>${step.gain}</span>
+      </li>
+    `;
+  });
+
+  progHtml += `</ul></div>`;
+  progDiv.innerHTML = progHtml;
+
+  // Section capacités
+  renderCapacites(classe, lunes, unlockedSteps, peuple, race);
+}
+
+function renderCapacites(classe, lunes, unlockedSteps, peuple, race) {
+  const capDiv = document.getElementById('capacitesContainer');
+
+  if (classe === 'Guerrier') {
+    renderGuerrier(capDiv, lunes, unlockedSteps);
+  } else if (classe === 'Mage') {
+    renderMage(capDiv, lunes, peuple, race);
+  } else if (classe === 'Prêtre') {
+    renderPretre(capDiv, lunes, race);
+  } else if (classe === 'Fée' || classe === 'Ogre' || classe === 'Skaven') {
+    renderRaciale(capDiv, classe, lunes);
+  } else {
+    capDiv.innerHTML = '<div class="class-prompt">Classe non reconnue.</div>';
+  }
+}
+
+function renderGuerrier(capDiv, lunes, unlockedSteps) {
+  const limits = DATA.getLimits('Guerrier', lunes);
+  const max = limits ? limits.habiletes : 0;
+
+  let html = `
+    <div class="limit-global" id="cnt-habiletes">
+      <span class="label">Habiletés guerrières :</span>
+      <strong><span class="count">0 / ${max}</span></strong>
+    </div>
+    <div class="field">
+      <label class="field-label">Habiletés guerrières</label>
+      <div class="chips" data-name="habiletes_guerrier" data-multi="true"></div>
+      <div class="chip-input">
+        <input type="text" placeholder="Autre habileté…">
+        <button type="button" onclick="addCustomChip(this, 'habiletes_guerrier')">+ Ajouter</button>
+      </div>
+    </div>
+  `;
+  capDiv.innerHTML = html;
+  fillChips('habiletes_guerrier', DATA.habiletes_guerrier);
+  updateLimitsUI();
+}
+
+function renderMage(capDiv, lunes, peuple, race) {
+  // Filtrage strict par lune
+  const showFaibles = lunes >= 1;
+  const showInter = lunes >= 6;
+  const showMajeurs = lunes >= 15;
+
+  if (!showFaibles) {
+    capDiv.innerHTML = '<div class="class-prompt">Indique au moins <strong style="color:var(--gold-bright)">1 lune</strong> pour voir les sorts disponibles.</div>';
+    return;
+  }
+
+  // Avertissement Orque Vert ne peut être Mage
+  let warning = '';
+  if (race === 'Orque Vert') {
+    warning = `<div class="info-banner" style="border-left-color:var(--crimson-bright); background:rgba(168,50,50,0.12);">
+      ⚠ <strong>Attention</strong> : selon le Livre des Règles, un <strong>Orque Vert ne peut pas être Mage</strong>.
+    </div>`;
+  }
+
+  const limits = DATA.getLimits('Mage', lunes);
+
+  let html = warning;
+  html += `<div class="info-banner">Sorts affichés selon les lunes débloquées${peuple ? ' et le peuple <strong>' + peuple + '</strong>' : ''}. Le nombre maximum de sorts choisissables est limité selon la lune.</div>`;
+
+  // Compteur global
+  html += `
+    <div class="limit-global" id="cnt-global">
+      Total sorts choisis : <strong><span class="global-count">0</span> / <span class="global-max">${limits.global}</span></strong>
+    </div>
+  `;
+
+  // SORTS FAIBLES (lune 1+)
+  html += `
+    <div class="spell-group">
+      <div class="spell-group-label">Sorts Faibles (lune 1+)</div>
+      <div class="limit-counter" id="cnt-mage-faibles">
+        <span class="label">Faibles</span>
+        <span class="count">0 sélectionné</span>
+      </div>
+      <div class="chips" data-name="sorts_mage_faibles" data-multi="true"></div>
+    </div>
+  `;
+
+  // SORTS INTERMÉDIAIRES (lune 6+)
+  if (showInter) {
+    html += `
+      <div class="spell-group">
+        <div class="spell-group-label">Sorts Intermédiaires (lune 6+)</div>
+        <div class="limit-counter" id="cnt-mage-inter">
+          <span class="label">Intermédiaires</span>
+          <span class="count">0 sélectionné</span>
+        </div>
+        <div class="chips" data-name="sorts_mage_intermediaires" data-multi="true"></div>
+      </div>
+    `;
+  }
+
+  // SORTS MAJEURS (lune 15+)
+  if (showMajeurs) {
+    html += `
+      <div class="spell-group">
+        <div class="spell-group-label">Sorts Majeurs (lune 15+) ★ = restriction de peuple</div>
+        <div class="limit-counter" id="cnt-mage-majeurs">
+          <span class="label">Majeurs</span>
+          <span class="count">0 sélectionné</span>
+        </div>
+        <div class="chips" data-name="sorts_mage_majeurs" data-multi="true"></div>
+      </div>
+    `;
+  }
+
+  html += `
+    <div class="field" style="margin-top:0.8rem;">
+      <label class="field-label">Sorts personnalisés / parchemins</label>
+      <textarea name="sorts_mage_autres" rows="2" placeholder="Sorts hors liste, parchemins, restrictions spéciales…"></textarea>
+    </div>
+  `;
+  capDiv.innerHTML = html;
+
+  // Remplir les chips avec contexte (pour filtrer les sorts à restriction)
+  const context = { peuple: peuple, race: race };
+  fillChips('sorts_mage_faibles', DATA.sorts_mage_faibles, context);
+  if (showInter) fillChips('sorts_mage_intermediaires', DATA.sorts_mage_intermediaires, context);
+  if (showMajeurs) fillChips('sorts_mage_majeurs', DATA.sorts_mage_majeurs, context);
+
+  updateLimitsUI();
+}
+
+function renderPretre(capDiv, lunes, race) {
+  const showVade = lunes >= 10;
+
+  // Déterminer les divinités accessibles selon la race
+  let divinitesAccessibles;
+  let infoRaceDivinite = '';
+
+  if (!race) {
+    // Aucune race choisie : avertissement
+    capDiv.innerHTML = `
+      <div class="info-banner" style="border-left-color:var(--crimson-bright); background:rgba(168,50,50,0.12);">
+        ⚠ <strong>Sélectionne d'abord une race</strong> à la section Identité pour voir les divinités accessibles à ce prêtre.
+      </div>
+    `;
+    return;
+  }
+
+  const raceDivinites = DATA.divinites_par_race[race];
+
+  if (raceDivinites === null || raceDivinites === undefined) {
+    // null = toutes les divinités (Humain, Demi-race, Autre)
+    divinitesAccessibles = DATA.divinites_pretre;
+    infoRaceDivinite = `<strong>${race}</strong> peut adorer toutes les divinités.`;
+  } else {
+    divinitesAccessibles = raceDivinites;
+    infoRaceDivinite = `Divinités accessibles aux <strong>${race}</strong> : ${raceDivinites.length} divinité${raceDivinites.length > 1 ? 's' : ''}.`;
+  }
+
+  let html = `
+    <div class="info-banner">${infoRaceDivinite}</div>
+
+    <div class="field" style="margin-bottom:1rem;">
+      <label class="field-label">Divinité</label>
+      <select name="divinite_pretre" id="divinitePretre" onchange="updatePretreSorts()"></select>
+    </div>
+
+    <div id="pretreSortsContainer">
+      <div class="class-prompt">Sélectionne une <strong style="color:var(--gold-bright)">divinité</strong> pour voir les sorts disponibles.</div>
+    </div>
+  `;
+
+  if (showVade) {
+    html += `
+      <div class="field" style="margin-top:1rem;">
+        <label class="field-label">Bonus L10 — Choix unique</label>
+        <div class="chips" data-name="bonus_l10" data-multi="false"></div>
+      </div>
+    `;
+  }
+
+  html += `
+    <div class="field" style="margin-top:0.8rem;">
+      <label class="field-label">Sorts personnalisés / parchemins</label>
+      <textarea name="sorts_pretre_autres" rows="2" placeholder="Sorts hors liste, parchemins, restrictions spéciales…"></textarea>
+    </div>
+  `;
+  capDiv.innerHTML = html;
+
+  fillSelect('divinitePretre', divinitesAccessibles, true);
+
+  if (showVade) {
+    fillChips('bonus_l10', ['Vade Rétro', 'Antée Rétro', 'Contrôle des morts-vivants']);
+  }
+}
+
+function updatePretreSorts() {
+  const div = document.getElementById('divinitePretre').value;
+  const container = document.getElementById('pretreSortsContainer');
+
+  if (!div) {
+    container.innerHTML = '<div class="class-prompt">Sélectionne une <strong style="color:var(--gold-bright)">divinité</strong> pour voir les sorts disponibles.</div>';
+    return;
+  }
+
+  const sortsDivinite = DATA.sorts_pretre_par_divinite[div] || [];
+  const lunes = parseInt(document.getElementById('lunes').value) || 0;
+  const peuple = document.getElementById('faction').value;
+
+  // Filtres par niveau selon les lunes
+  const showFaibles = lunes >= 1;
+  const showInter = lunes >= 6;
+  const showMajeurs = lunes >= 15;
+
+  // Helper : récupère le nom d'un sort (string ou objet avec restriction)
+  function getNomSort(s) { return typeof s === 'string' ? s : s.nom; }
+
+  // Helper : vérifie si un sort de la liste majeurs est accessible selon le peuple
+  function checkRestriction(sortObj, peuple) {
+    if (typeof sortObj === 'string') return true;
+    if (sortObj.restriction && sortObj.restriction.peuple) {
+      return peuple === sortObj.restriction.peuple;
+    }
+    return true;
+  }
+
+  // Normaliser : enlever accents, casse, espaces pour comparaisons fiables
+  function normalize(s) {
+    return s.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // enlève accents
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  // Construire des Sets normalisés pour matcher rapidement
+  const divNorm = new Set(sortsDivinite.map(normalize));
+
+  // Filtrer chaque niveau : garder seulement les sorts qui sont DANS la liste de la divinité
+  const matchedFaibles = DATA.sorts_pretre_niveaux.faibles
+    .filter(s => divNorm.has(normalize(getNomSort(s))));
+
+  const matchedIntermediaires = DATA.sorts_pretre_niveaux.intermediaires
+    .filter(s => divNorm.has(normalize(getNomSort(s))));
+
+  const matchedMajeurs = DATA.sorts_pretre_niveaux.majeurs
+    .filter(s => divNorm.has(normalize(getNomSort(s))) && checkRestriction(s, peuple));
+
+  // Sorts de la divinité qui ne sont dans aucune liste de niveau (sorts spéciaux des Kamis, Seth, Oz, etc.)
+  const allNiveauxNorm = new Set([
+    ...DATA.sorts_pretre_niveaux.faibles.map(s => normalize(getNomSort(s))),
+    ...DATA.sorts_pretre_niveaux.intermediaires.map(s => normalize(getNomSort(s))),
+    ...DATA.sorts_pretre_niveaux.majeurs.map(s => normalize(getNomSort(s)))
+  ]);
+  const sortsSpeciaux = sortsDivinite.filter(s => !allNiveauxNorm.has(normalize(s)));
+
+  let html = `<div class="info-banner">Sorts du panthéon de <strong>${div}</strong> filtrés par niveau selon les lunes (${lunes || 0}).</div>`;
+
+  // Compteur global
+  const limits = DATA.getLimits('Prêtre', lunes);
+  if (limits) {
+    html += `
+      <div class="limit-global" id="cnt-global">
+        Total sorts choisis : <strong><span class="global-count">0</span> / <span class="global-max">${limits.global}</span></strong>
+      </div>
+    `;
+  }
+
+  // SORTS FAIBLES
+  if (showFaibles && matchedFaibles.length > 0) {
+    html += `
+      <div class="spell-group">
+        <div class="spell-group-label">Sorts Faibles (lune 1+)</div>
+        <div class="limit-counter" id="cnt-pretre-faibles">
+          <span class="label">Faibles</span>
+          <span class="count">0 sélectionné</span>
+        </div>
+        <div class="chips" data-name="sorts_pretre_faibles" data-multi="true"></div>
+      </div>
+    `;
+  }
+
+  // SORTS INTERMÉDIAIRES
+  if (showInter && matchedIntermediaires.length > 0) {
+    html += `
+      <div class="spell-group">
+        <div class="spell-group-label">Sorts Intermédiaires (lune 6+)</div>
+        <div class="limit-counter" id="cnt-pretre-inter">
+          <span class="label">Intermédiaires</span>
+          <span class="count">0 sélectionné</span>
+        </div>
+        <div class="chips" data-name="sorts_pretre_intermediaires" data-multi="true"></div>
+      </div>
+    `;
+  }
+
+  // SORTS MAJEURS
+  if (showMajeurs && matchedMajeurs.length > 0) {
+    html += `
+      <div class="spell-group">
+        <div class="spell-group-label">Sorts Majeurs (lune 15+) ★ = restriction de peuple</div>
+        <div class="limit-counter" id="cnt-pretre-majeurs">
+          <span class="label">Majeurs</span>
+          <span class="count">0 sélectionné</span>
+        </div>
+        <div class="chips" data-name="sorts_pretre_majeurs" data-multi="true"></div>
+      </div>
+    `;
+  }
+
+  // SORTS SPÉCIAUX (Kamis, Seth, Oz...)
+  if (sortsSpeciaux.length > 0) {
+    html += `
+      <div class="spell-group">
+        <div class="spell-group-label">Sorts spéciaux / À définir avec animation</div>
+        <div class="chips" data-name="sorts_pretre_speciaux" data-multi="true"></div>
+      </div>
+    `;
+  }
+
+  // Si aucun sort n'est disponible (cas rare)
+  if (!showFaibles) {
+    html += `<div class="class-prompt">Indique au moins <strong style="color:var(--gold-bright)">1 lune</strong> pour voir les sorts disponibles.</div>`;
+  } else if (matchedFaibles.length === 0 && matchedIntermediaires.length === 0 && matchedMajeurs.length === 0 && sortsSpeciaux.length === 0) {
+    html += `<div class="class-prompt">Aucun sort trouvé pour cette divinité. Utilise le champ libre ci-dessous.</div>`;
+  }
+
+  html += `
+    <div class="field" style="margin-top:0.8rem;">
+      <label class="field-label">Champ libre — Notes sur les sorts</label>
+      <textarea name="sorts_pretre_choisis" rows="2" placeholder="Sorts personnalisés ou notes…"></textarea>
+    </div>
+  `;
+
+  container.innerHTML = html;
+
+  // Reset selections
+  state.selections['sorts_pretre_faibles'] = [];
+  state.selections['sorts_pretre_intermediaires'] = [];
+  state.selections['sorts_pretre_majeurs'] = [];
+  state.selections['sorts_pretre_speciaux'] = [];
+
+  // Remplir les chips (avec contexte pour les majeurs qui ont des restrictions de peuple)
+  const context = { peuple: peuple };
+  if (showFaibles && matchedFaibles.length > 0) fillChips('sorts_pretre_faibles', matchedFaibles, context);
+  if (showInter && matchedIntermediaires.length > 0) fillChips('sorts_pretre_intermediaires', matchedIntermediaires, context);
+  if (showMajeurs && matchedMajeurs.length > 0) fillChips('sorts_pretre_majeurs', matchedMajeurs, context);
+  if (sortsSpeciaux.length > 0) fillChips('sorts_pretre_speciaux', sortsSpeciaux);
+
+  updateLimitsUI();
+}
+
+function renderRaciale(capDiv, classe, lunes) {
+  let description = '';
+  if (classe === 'Fée') {
+    description = 'Pouvoirs de classe Fée gagnés à la 1<sup>e</sup>, 3<sup>e</sup>, 6<sup>e</sup>, 9<sup>e</sup> et 12<sup>e</sup> lune. Voir le Livre des Règles ou l\'animation pour les détails spécifiques (poudre de fée, etc.).';
+  } else if (classe === 'Ogre') {
+    description = 'Pouvoir <strong>Faim de l\'Ogre</strong> : +1 PV à la 3<sup>e</sup> lune (1 corps dévoré), +2 PV à la 9<sup>e</sup> lune (2 corps), et progressivement jusqu\'à +5 PV. <strong>Guerrier Dévoré</strong> : peut assimiler les habiletés guerrières d\'un ogre dévoré.';
+  } else if (classe === 'Skaven') {
+    description = 'Classe prestige unique aux Ratkins. <strong>Aura de courage</strong> en groupe de 3+ individus. Pouvoirs spécifiques voir animation/Livre des Règles.';
+  }
+
+  capDiv.innerHTML = `
+    <div class="info-banner">${description}</div>
+    <div class="field" style="margin-top:0.8rem;">
+      <label class="field-label">Pouvoirs de classe (texte libre)</label>
+      <textarea name="pouvoirs_raciale" rows="4" placeholder="Détaille les pouvoirs spécifiques de ce ${classe.toLowerCase()}…"></textarea>
+    </div>
+  `;
+}
+
+/* ============================================================
+   ENREGISTREMENT
+   ============================================================ */
+
+function saveGasUrl() {
+  GAS_URL = document.getElementById('gas-url').value.trim();
+  showToast('✓', 'URL sauvegardée', 'L\'URL Google Apps Script est configurée pour cette session.');
+}
+
+function gatherFormData() {
+  const form = document.getElementById('form-figurant');
+  const data = {};
+  form.querySelectorAll('input, textarea, select').forEach(el => {
+    if (el.name) data[el.name] = el.value;
+  });
+  form.querySelectorAll('.chips').forEach(c => {
+    const name = c.dataset.name;
+    if (state.selections[name]) {
+      data[name] = state.selections[name].join(', ');
+    }
+  });
+  data._template = 'Fiche Figurant';
+  data._timestamp = new Date().toISOString();
+  return data;
+}
+
+async function saveForm() {
+  const data = gatherFormData();
+
+  if (!data.nom_personnage || data.nom_personnage.trim() === '') {
+    showToast('!', 'Nom requis', 'Donne au moins un nom au personnage avant d\'enregistrer.', 'error');
+    return;
+  }
+
+  const saveBtn = document.getElementById('save-btn');
+  saveBtn.disabled = true;
+  saveBtn.textContent = 'Envoi…';
+
+  try {
+    if (GAS_URL) {
+      await sendToGoogleDrive(data);
+      showToast('✓', 'Enregistré dans Drive', `La fiche « ${data.nom_personnage} » a été sauvegardée.`);
+    } else {
+      downloadDocFallback(data);
+      showToast('↓', 'Téléchargé', `La fiche « ${data.nom_personnage} » a été téléchargée.`);
+    }
+
+    setTimeout(() => {
+      resetFormSilent();
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Enregistrer ↓';
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }, 1500);
+
+  } catch (err) {
+    console.error(err);
+    showToast('✗', 'Erreur', 'Impossible d\'envoyer la fiche. Vérifie l\'URL.', 'error');
+    saveBtn.disabled = false;
+    saveBtn.textContent = 'Enregistrer ↓';
+  }
+}
+
+async function sendToGoogleDrive(data) {
+  return fetch(GAS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'text/plain;charset=utf-8'},
+    body: JSON.stringify(data)
+  });
+}
+
+function downloadDocFallback(data) {
+  const html = generateDocHtml(data);
+  const blob = new Blob(['\ufeff', html], {type: 'application/msword'});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  const filename = `Fiche-Figurant_${(data.nom_personnage || 'sans-nom').replace(/[^a-z0-9]/gi, '-')}_${Date.now()}.doc`;
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function generateDocHtml(data) {
+  const title = `Fiche Figurant — ${data.nom_personnage || 'Sans nom'}`;
+
+  let aptitudesHtml = '';
+  if (data.classe === 'Guerrier' && data.habiletes_guerrier) {
+    aptitudesHtml += `<p><b>Habiletés guerrières :</b> ${esc(data.habiletes_guerrier)}</p>`;
+  }
+  if (data.classe === 'Mage') {
+    if (data.sorts_mage_faibles) aptitudesHtml += `<p><b>Sorts faibles :</b> ${esc(data.sorts_mage_faibles)}</p>`;
+    if (data.sorts_mage_intermediaires) aptitudesHtml += `<p><b>Sorts intermédiaires :</b> ${esc(data.sorts_mage_intermediaires)}</p>`;
+    if (data.sorts_mage_majeurs) aptitudesHtml += `<p><b>Sorts majeurs :</b> ${esc(data.sorts_mage_majeurs)}</p>`;
+    if (data.sorts_mage_autres) aptitudesHtml += `<p><b>Autres sorts :</b> ${esc(data.sorts_mage_autres)}</p>`;
+  }
+  if (data.classe === 'Prêtre') {
+    if (data.divinite_pretre) aptitudesHtml += `<p><b>Divinité :</b> ${esc(data.divinite_pretre)}</p>`;
+    if (data.sorts_pretre_faibles) aptitudesHtml += `<p><b>Sorts faibles :</b> ${esc(data.sorts_pretre_faibles)}</p>`;
+    if (data.sorts_pretre_intermediaires) aptitudesHtml += `<p><b>Sorts intermédiaires :</b> ${esc(data.sorts_pretre_intermediaires)}</p>`;
+    if (data.sorts_pretre_majeurs) aptitudesHtml += `<p><b>Sorts majeurs :</b> ${esc(data.sorts_pretre_majeurs)}</p>`;
+    if (data.sorts_pretre_speciaux) aptitudesHtml += `<p><b>Sorts spéciaux :</b> ${esc(data.sorts_pretre_speciaux)}</p>`;
+    if (data.sorts_pretre_choisis) aptitudesHtml += `<p><b>Notes sur les sorts :</b> ${esc(data.sorts_pretre_choisis)}</p>`;
+    if (data.bonus_l10) aptitudesHtml += `<p><b>Bonus L10 :</b> ${esc(data.bonus_l10)}</p>`;
+    if (data.sorts_pretre_autres) aptitudesHtml += `<p><b>Autres sorts :</b> ${esc(data.sorts_pretre_autres)}</p>`;
+  }
+  if (['Fée', 'Ogre', 'Skaven'].includes(data.classe) && data.pouvoirs_raciale) {
+    aptitudesHtml += `<p><b>Pouvoirs de classe (${data.classe}) :</b> ${esc(data.pouvoirs_raciale)}</p>`;
+  }
+  if (data.aptitudes_libre) {
+    aptitudesHtml += `<p><b>Aptitudes additionnelles :</b> ${esc(data.aptitudes_libre)}</p>`;
+  }
+  if (!aptitudesHtml) {
+    aptitudesHtml = '<p><em style="color:#999;">—</em></p>';
+  }
+
+  const body = `
+    <h1 style="text-align:center;">Fiche Figurant — GN</h1>
+    <hr>
+
+    <table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse:collapse;">
+      <tr><th style="background:#f0e6cc;">Nom du figurant</th><th style="background:#f0e6cc;">Nom du personnage</th></tr>
+      <tr><td>${esc(data.nom_figurant)}</td><td>${esc(data.nom_personnage)}</td></tr>
+      <tr><th style="background:#f0e6cc;">Race</th><th style="background:#f0e6cc;">Faction</th></tr>
+      <tr><td>${esc(data.race)}</td><td>${esc(data.faction)}</td></tr>
+      <tr><th style="background:#f0e6cc;" colspan="2">Attitude</th></tr>
+      <tr><td colspan="2">${esc(data.attitude)}</td></tr>
+      <tr><th style="background:#f0e6cc;">Points de vie</th><th style="background:#f0e6cc;">Points d'armure</th></tr>
+      <tr><td>${esc(data.pv)}</td><td>${esc(data.pa)}</td></tr>
+      <tr><th style="background:#f0e6cc;">Classe</th><th style="background:#f0e6cc;">Lunes</th></tr>
+      <tr><td>${esc(data.classe)}</td><td>${esc(data.lunes)}</td></tr>
+    </table>
+
+    <h3>Aptitudes &amp; Sorts</h3>
+    ${aptitudesHtml}
+
+    <h3>Notes</h3>
+    <p>${esc(data.notes)}</p>
+  `;
+
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title>
+<style>
+body { font-family: Cambria, Georgia, serif; max-width: 800px; margin: 2cm auto; line-height: 1.5; color: #1a0f08; }
+h1 { color: #6b1f1f; border-bottom: 2px solid #b8893a; padding-bottom: 0.5rem; text-align:center; }
+h3 { color: #8a6420; border-bottom: 1px solid #d4a754; padding-bottom: 0.2rem; margin-top: 1.5rem; }
+table { margin-top: 1rem; }
+th { color: #6b1f1f; text-align: left; padding: 0.5rem; }
+td { padding: 0.5rem; min-height: 1.5rem; }
+hr { border: none; border-top: 1px solid #b8893a; margin: 1.5rem 0; }
+b { color: #6b1f1f; }
+</style>
+</head><body>${body}</body></html>`;
+}
+
+function esc(str) {
+  if (str === undefined || str === null || str === '') return '<em style="color:#999;">—</em>';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+}
+
+function resetForm() {
+  if (!confirm('Effacer tous les champs de cette fiche?')) return;
+  resetFormSilent();
+}
+
+function resetFormSilent() {
+  const form = document.getElementById('form-figurant');
+  form.reset();
+  form.querySelectorAll('.chip.selected').forEach(c => c.classList.remove('selected'));
+  Object.keys(state.selections).forEach(k => { state.selections[k] = []; });
+
+  fillChips('attitude', DATA.attitude);
+
+  document.getElementById('progression').innerHTML = '';
+  document.getElementById('capacitesContainer').innerHTML = '<div class="class-prompt">Sélectionne d\'abord une <strong style="color:var(--gold-bright)">classe de base</strong> et des <strong style="color:var(--gold-bright)">lunes</strong> à la section précédente.</div>';
+
+  form.querySelectorAll('.section').forEach((s, i) => {
+    if (i > 0) s.classList.add('collapsed');
+    else s.classList.remove('collapsed');
+  });
+}
+
+function showToast(icon, title, msg, type = 'success') {
+  const toast = document.getElementById('toast');
+  document.getElementById('toast-icon').textContent = icon;
+  document.getElementById('toast-title').textContent = title;
+  document.getElementById('toast-msg').textContent = msg;
+  toast.classList.toggle('error', type === 'error');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2800);
+}
+
+function openSetup() {
+  document.getElementById('modal').classList.add('show');
+  document.getElementById('gas-url').value = GAS_URL;
+}
+function closeSetup() {
+  document.getElementById('modal').classList.remove('show');
+}
+
+init();
+</script>
+
+</body>
+</html>
