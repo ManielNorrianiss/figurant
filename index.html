@@ -1187,7 +1187,7 @@ const DATA = {
 };
 
 const state = { selections: {} };
-let GAS_URL = '';
+let GAS_URL = 'https://script.google.com/macros/s/AKfycbweQ2fzsttVjSqXq7_guC1lwLn_dXrpingkgOE72lrnQ-4-fDWbEV6uXetiWuJeja-BUQ/exec';
 
 /* ============================================================
    INITIALISATION
@@ -1928,20 +1928,26 @@ async function saveForm() {
 }
 
 async function sendToGoogleDrive(data) {
+  // Génère le HTML complet et l'inclut dans les données envoyées
+  // L'Apps Script va sauvegarder ce HTML directement comme fichier .html dans Drive
+  const fullHtml = generateDocHtml(data);
+  const payload = Object.assign({}, data, { _html: fullHtml });
+
   return fetch(GAS_URL, {
     method: 'POST',
     mode: 'no-cors',
     headers: {'Content-Type': 'text/plain;charset=utf-8'},
-    body: JSON.stringify(data)
+    body: JSON.stringify(payload)
   });
 }
 
 function downloadDocFallback(data) {
   const html = generateDocHtml(data);
-  const blob = new Blob(['\ufeff', html], {type: 'application/msword'});
+  const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
-  const filename = `Fiche-Figurant_${(data.nom_personnage || 'sans-nom').replace(/[^a-z0-9]/gi, '-')}_${Date.now()}.doc`;
+  const cleanName = (data.nom_personnage || 'Sans nom').replace(/[\\\/:*?"<>|]/g, '').trim() || 'Sans nom';
+  const filename = cleanName + '.html';
   link.href = url;
   link.download = filename;
   link.click();
@@ -1949,74 +1955,517 @@ function downloadDocFallback(data) {
 }
 
 function generateDocHtml(data) {
-  const title = `Fiche Figurant — ${data.nom_personnage || 'Sans nom'}`;
+  const title = `${data.nom_personnage || 'Sans nom'} — Fiche Figurant`;
 
-  let aptitudesHtml = '';
-  if (data.classe === 'Guerrier' && data.habiletes_guerrier) {
-    aptitudesHtml += `<p><b>Habiletés guerrières :</b> ${esc(data.habiletes_guerrier)}</p>`;
-  }
+  // Helper qui génère un champ "label : valeur" avec data-attr pour l'édition
+  const f = (label, value, fieldKey, multiline) => {
+    if (!value || (typeof value === 'string' && value.trim() === '')) {
+      return `<div class="field"><span class="lbl">${label} :</span> <span class="val empty" data-field="${fieldKey || ''}" data-multiline="${multiline?'true':'false'}">—</span></div>`;
+    }
+    return `<div class="field"><span class="lbl">${label} :</span> <span class="val" data-field="${fieldKey || ''}" data-multiline="${multiline?'true':'false'}">${esc(value)}</span></div>`;
+  };
+
+  // Section avec accordéon
+  const section = (num, sectTitle, content, isOpen) => {
+    return `
+    <section class="card${isOpen ? ' open' : ''}">
+      <header onclick="toggleCard(this)">
+        <span class="num">${num}</span>
+        <h2>${sectTitle}</h2>
+        <span class="chev">▼</span>
+      </header>
+      <div class="body">${content}</div>
+    </section>`;
+  };
+
+  // Construction du contenu de la section Capacités selon la classe
+  let capacitesContent = '';
+  capacitesContent += f('Classe', data.classe, 'classe');
+  capacitesContent += f('Lunes', data.lunes, 'lunes');
+  if (data.classe === 'Guerrier' && data.habiletes_guerrier)
+    capacitesContent += f('Habiletés guerrières', data.habiletes_guerrier, 'habiletes_guerrier', true);
   if (data.classe === 'Mage') {
-    if (data.sorts_mage_faibles) aptitudesHtml += `<p><b>Sorts faibles :</b> ${esc(data.sorts_mage_faibles)}</p>`;
-    if (data.sorts_mage_intermediaires) aptitudesHtml += `<p><b>Sorts intermédiaires :</b> ${esc(data.sorts_mage_intermediaires)}</p>`;
-    if (data.sorts_mage_majeurs) aptitudesHtml += `<p><b>Sorts majeurs :</b> ${esc(data.sorts_mage_majeurs)}</p>`;
-    if (data.sorts_mage_autres) aptitudesHtml += `<p><b>Autres sorts :</b> ${esc(data.sorts_mage_autres)}</p>`;
+    if (data.sorts_mage_faibles) capacitesContent += f('Sorts faibles', data.sorts_mage_faibles, 'sorts_mage_faibles', true);
+    if (data.sorts_mage_intermediaires) capacitesContent += f('Sorts intermédiaires', data.sorts_mage_intermediaires, 'sorts_mage_intermediaires', true);
+    if (data.sorts_mage_majeurs) capacitesContent += f('Sorts majeurs', data.sorts_mage_majeurs, 'sorts_mage_majeurs', true);
+    if (data.sorts_mage_autres) capacitesContent += f('Sorts personnalisés', data.sorts_mage_autres, 'sorts_mage_autres', true);
   }
   if (data.classe === 'Prêtre') {
-    if (data.divinite_pretre) aptitudesHtml += `<p><b>Divinité :</b> ${esc(data.divinite_pretre)}</p>`;
-    if (data.sorts_pretre_faibles) aptitudesHtml += `<p><b>Sorts faibles :</b> ${esc(data.sorts_pretre_faibles)}</p>`;
-    if (data.sorts_pretre_intermediaires) aptitudesHtml += `<p><b>Sorts intermédiaires :</b> ${esc(data.sorts_pretre_intermediaires)}</p>`;
-    if (data.sorts_pretre_majeurs) aptitudesHtml += `<p><b>Sorts majeurs :</b> ${esc(data.sorts_pretre_majeurs)}</p>`;
-    if (data.sorts_pretre_speciaux) aptitudesHtml += `<p><b>Sorts spéciaux :</b> ${esc(data.sorts_pretre_speciaux)}</p>`;
-    if (data.sorts_pretre_choisis) aptitudesHtml += `<p><b>Notes sur les sorts :</b> ${esc(data.sorts_pretre_choisis)}</p>`;
-    if (data.bonus_l10) aptitudesHtml += `<p><b>Bonus L10 :</b> ${esc(data.bonus_l10)}</p>`;
-    if (data.sorts_pretre_autres) aptitudesHtml += `<p><b>Autres sorts :</b> ${esc(data.sorts_pretre_autres)}</p>`;
+    if (data.divinite_pretre) capacitesContent += f('Divinité', data.divinite_pretre, 'divinite_pretre');
+    if (data.sorts_pretre_faibles) capacitesContent += f('Sorts faibles', data.sorts_pretre_faibles, 'sorts_pretre_faibles', true);
+    if (data.sorts_pretre_intermediaires) capacitesContent += f('Sorts intermédiaires', data.sorts_pretre_intermediaires, 'sorts_pretre_intermediaires', true);
+    if (data.sorts_pretre_majeurs) capacitesContent += f('Sorts majeurs', data.sorts_pretre_majeurs, 'sorts_pretre_majeurs', true);
+    if (data.sorts_pretre_speciaux) capacitesContent += f('Sorts spéciaux', data.sorts_pretre_speciaux, 'sorts_pretre_speciaux', true);
+    if (data.bonus_l10) capacitesContent += f('Bonus L10', data.bonus_l10, 'bonus_l10');
+    if (data.sorts_pretre_autres) capacitesContent += f('Sorts personnalisés', data.sorts_pretre_autres, 'sorts_pretre_autres', true);
   }
-  if (['Fée', 'Ogre', 'Skaven'].includes(data.classe) && data.pouvoirs_raciale) {
-    aptitudesHtml += `<p><b>Pouvoirs de classe (${data.classe}) :</b> ${esc(data.pouvoirs_raciale)}</p>`;
-  }
-  if (data.aptitudes_libre) {
-    aptitudesHtml += `<p><b>Aptitudes additionnelles :</b> ${esc(data.aptitudes_libre)}</p>`;
-  }
-  if (!aptitudesHtml) {
-    aptitudesHtml = '<p><em style="color:#999;">—</em></p>';
-  }
+  if (['Fée', 'Ogre', 'Skaven'].includes(data.classe) && data.pouvoirs_raciale)
+    capacitesContent += f(`Pouvoirs (${data.classe})`, data.pouvoirs_raciale, 'pouvoirs_raciale', true);
+  if (data.aptitudes_libre)
+    capacitesContent += f('Aptitudes additionnelles', data.aptitudes_libre, 'aptitudes_libre', true);
 
-  const body = `
-    <h1 style="text-align:center;">Fiche Figurant — GN</h1>
-    <hr>
+  // Construction des sections
+  const sectionsHtml = [
+    section('1', 'Identité',
+      f('Nom du personnage', data.nom_personnage, 'nom_personnage') +
+      f('Joué par (figurant)', data.nom_figurant, 'nom_figurant') +
+      f('Race', data.race, 'race') +
+      f('Faction / Peuple', data.faction, 'faction'),
+      true),
 
-    <table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse:collapse;">
-      <tr><th style="background:#f0e6cc;">Nom du figurant</th><th style="background:#f0e6cc;">Nom du personnage</th></tr>
-      <tr><td>${esc(data.nom_figurant)}</td><td>${esc(data.nom_personnage)}</td></tr>
-      <tr><th style="background:#f0e6cc;">Race</th><th style="background:#f0e6cc;">Faction</th></tr>
-      <tr><td>${esc(data.race)}</td><td>${esc(data.faction)}</td></tr>
-      <tr><th style="background:#f0e6cc;" colspan="2">Attitude</th></tr>
-      <tr><td colspan="2">${esc(data.attitude)}</td></tr>
-      <tr><th style="background:#f0e6cc;">Points de vie</th><th style="background:#f0e6cc;">Points d'armure</th></tr>
-      <tr><td>${esc(data.pv)}</td><td>${esc(data.pa)}</td></tr>
-      <tr><th style="background:#f0e6cc;">Classe</th><th style="background:#f0e6cc;">Lunes</th></tr>
-      <tr><td>${esc(data.classe)}</td><td>${esc(data.lunes)}</td></tr>
-    </table>
+    section('2', 'Attitude',
+      f('Attitude', data.attitude, 'attitude'),
+      false),
 
-    <h3>Aptitudes &amp; Sorts</h3>
-    ${aptitudesHtml}
+    section('3', 'Statistiques',
+      f('Points de vie', data.pv, 'pv') +
+      f('Points d\'armure', data.pa, 'pa'),
+      false),
 
-    <h3>Notes</h3>
-    <p>${esc(data.notes)}</p>
-  `;
+    section('4', 'Capacités', capacitesContent, false),
 
-  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title>
+    section('5', 'Notes',
+      f('Notes additionnelles', data.notes, 'notes', true),
+      false)
+  ].join('');
+
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${esc(title)}</title>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-body { font-family: Cambria, Georgia, serif; max-width: 800px; margin: 2cm auto; line-height: 1.5; color: #1a0f08; }
-h1 { color: #6b1f1f; border-bottom: 2px solid #b8893a; padding-bottom: 0.5rem; text-align:center; }
-h3 { color: #8a6420; border-bottom: 1px solid #d4a754; padding-bottom: 0.2rem; margin-top: 1.5rem; }
-table { margin-top: 1rem; }
-th { color: #6b1f1f; text-align: left; padding: 0.5rem; }
-td { padding: 0.5rem; min-height: 1.5rem; }
-hr { border: none; border-top: 1px solid #b8893a; margin: 1.5rem 0; }
-b { color: #6b1f1f; }
+:root {
+  --ink: #1a0f08;
+  --ink-soft: #2d1d12;
+  --parchment: #e8d9b8;
+  --parchment-light: #f4e9d0;
+  --parchment-dark: #c9b88f;
+  --gold: #b8893a;
+  --gold-bright: #d4a754;
+  --gold-deep: #8a6420;
+  --crimson: #6b1f1f;
+  --crimson-bright: #a83232;
+  --border: rgba(184, 137, 58, 0.35);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--ink);
+  color: var(--parchment);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  line-height: 1.55;
+  min-height: 100vh;
+}
+body {
+  background:
+    radial-gradient(ellipse at top, rgba(184, 137, 58, 0.08), transparent 50%),
+    radial-gradient(ellipse at bottom, rgba(107, 31, 31, 0.06), transparent 60%),
+    var(--ink);
+  background-attachment: fixed;
+  padding-bottom: 4rem;
+}
+.container { max-width: 700px; margin: 0 auto; padding: 1.5rem 1rem; }
+
+/* HEADER */
+header.top {
+  text-align: center;
+  padding: 2rem 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+.logo {
+  font-family: 'UnifrakturCook', cursive;
+  font-size: 2.5rem;
+  color: var(--gold-bright);
+  text-shadow: 0 2px 8px rgba(184, 137, 58, 0.3);
+  line-height: 1;
+}
+.subtitle {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--parchment-dark);
+  margin: 0.4rem 0 1.2rem;
+}
+.char-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--parchment-light);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+}
+.char-info {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: var(--gold);
+  font-style: italic;
+}
+.fiche-tag {
+  display: inline-block;
+  padding: 0.25rem 0.8rem;
+  border: 1px solid var(--gold-deep);
+  border-radius: 100px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  margin-top: 0.6rem;
+}
+.ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 1rem auto;
+  color: var(--gold);
+  max-width: 200px;
+}
+.ornament::before, .ornament::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+}
+
+/* TOOLBAR */
+.toolbar {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0.8rem 1rem;
+  background: rgba(45, 29, 18, 0.6);
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border);
+}
+.btn {
+  padding: 0.6rem 1.1rem;
+  background: transparent;
+  color: var(--parchment-light);
+  border: 1px solid var(--gold);
+  border-radius: 3px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn:hover { background: rgba(184, 137, 58, 0.15); }
+.btn-primary {
+  background: linear-gradient(180deg, var(--gold), var(--gold-deep));
+  color: var(--ink);
+  border-color: var(--gold-bright);
+}
+.btn-danger {
+  border-color: var(--crimson-bright);
+  color: var(--crimson-bright);
+}
+.btn-danger:hover { background: rgba(168, 50, 50, 0.15); }
+
+/* CARDS (sections en accordéon) */
+.card {
+  margin-bottom: 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(45, 29, 18, 0.4), rgba(26, 15, 8, 0.6));
+}
+.card header {
+  padding: 0.9rem 1rem;
+  background: linear-gradient(90deg, rgba(184, 137, 58, 0.12), transparent);
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.card.open header { border-bottom-color: var(--border); }
+.card .num {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gold-deep);
+  color: var(--parchment-light);
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 50%;
+  border: 1px solid var(--gold-bright);
+  flex-shrink: 0;
+}
+.card h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gold-bright);
+  flex: 1;
+}
+.card .chev {
+  color: var(--gold);
+  transition: transform 0.3s;
+  font-size: 0.8rem;
+}
+.card.open .chev { transform: rotate(180deg); }
+.card .body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s;
+  padding: 0 1rem;
+}
+.card.open .body {
+  max-height: 5000px;
+  padding: 1rem;
+}
+
+/* CHAMPS */
+.field {
+  margin-bottom: 0.7rem;
+  padding: 0.5rem 0.6rem;
+  background: rgba(244, 233, 208, 0.03);
+  border-left: 2px solid var(--gold-deep);
+  border-radius: 0 3px 3px 0;
+}
+.field .lbl {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gold-bright);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+.field .val {
+  color: var(--parchment-light);
+  font-size: 1rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  display: block;
+}
+.field .val.empty {
+  color: var(--parchment-dark);
+  font-style: italic;
+  opacity: 0.6;
+}
+
+/* MODE ÉDITION */
+body.editing .field .val {
+  background: rgba(184, 137, 58, 0.1);
+  border: 1px solid var(--gold);
+  border-radius: 3px;
+  padding: 0.4rem 0.6rem;
+  outline: none;
+}
+body.editing .field .val:focus {
+  background: rgba(184, 137, 58, 0.2);
+  border-color: var(--gold-bright);
+}
+body.editing .field .val.empty {
+  color: var(--parchment-light);
+  font-style: normal;
+  opacity: 1;
+}
+body.editing .field .val.empty:empty::before {
+  content: 'Cliquer pour remplir...';
+  color: var(--parchment-dark);
+  font-style: italic;
+}
+
+/* MODE IMPRESSION (clair) */
+body.print-mode {
+  background: white !important;
+  color: #1a0f08;
+}
+body.print-mode .container { max-width: 800px; }
+body.print-mode header.top { border-bottom-color: #b8893a; }
+body.print-mode .logo { color: #6b1f1f; text-shadow: none; }
+body.print-mode .subtitle { color: #8a6420; }
+body.print-mode .char-name { color: #1a0f08; }
+body.print-mode .char-info { color: #8a6420; }
+body.print-mode .fiche-tag { color: #6b1f1f; border-color: #b8893a; }
+body.print-mode .toolbar { background: #f4e9d0; border-color: #b8893a; }
+body.print-mode .btn { color: #6b1f1f; border-color: #b8893a; }
+body.print-mode .btn:hover { background: rgba(184, 137, 58, 0.1); }
+body.print-mode .btn-primary { background: #b8893a; color: white; }
+body.print-mode .card {
+  background: white !important;
+  border-color: #b8893a;
+}
+body.print-mode .card header {
+  background: #f4e9d0 !important;
+  border-bottom-color: #b8893a;
+}
+body.print-mode .card h2 { color: #6b1f1f; }
+body.print-mode .card.open .body { background: white; }
+body.print-mode .field {
+  background: #faf5e6;
+  border-left-color: #8a6420;
+}
+body.print-mode .field .lbl { color: #6b1f1f; }
+body.print-mode .field .val { color: #1a0f08; }
+body.print-mode .field .val.empty { color: #999; }
+body.print-mode .ornament { color: #b8893a; }
+body.print-mode .ornament::before, body.print-mode .ornament::after {
+  background: linear-gradient(to right, transparent, #b8893a, transparent);
+}
+
+/* IMPRESSION RÉELLE */
+@media print {
+  .toolbar { display: none !important; }
+  .card .body { max-height: none !important; padding: 1rem !important; }
+  .card .chev { display: none; }
+  body { background: white !important; color: black !important; }
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+  .logo { font-size: 2rem; }
+  .char-name { font-size: 1.3rem; }
+  .container { padding: 1rem 0.7rem; }
+  .toolbar { gap: 0.4rem; }
+  .btn { padding: 0.5rem 0.8rem; font-size: 0.7rem; }
+}
 </style>
-</head><body>${body}</body></html>`;
+</head>
+<body>
+
+<div class="container">
+
+  <header class="top">
+    <div class="logo">Fléau</div>
+    <div class="subtitle">Grandeur Nature</div>
+    <div class="ornament">✦</div>
+    <div class="char-name">${esc(data.nom_personnage || 'Sans nom')}</div>
+    <div class="char-info">${esc(data.race || '')}${data.race && data.faction ? ' · ' : ''}${esc(data.faction || '')}</div>
+    <div class="fiche-tag">🛡 Fiche Figurant</div>
+    <div class="ornament">✦</div>
+  </header>
+
+  <div class="toolbar">
+    <button class="btn btn-primary" id="editBtn" onclick="toggleEdit()">✎ Modifier</button>
+    <button class="btn" id="saveBtn" onclick="saveChanges()" style="display:none;">💾 Sauvegarder</button>
+    <button class="btn btn-danger" id="cancelBtn" onclick="cancelEdit()" style="display:none;">✗ Annuler</button>
+    <button class="btn" onclick="togglePrintMode()">🌓 Mode clair</button>
+    <button class="btn" onclick="window.print()">🖨 Imprimer</button>
+    <button class="btn" onclick="expandAll()">⊞ Tout déplier</button>
+    <button class="btn" onclick="collapseAll()">⊟ Tout replier</button>
+  </div>
+
+  ${sectionsHtml}
+
+</div>
+
+<script>
+function toggleCard(headerEl) {
+  if (document.body.classList.contains('editing')) return;
+  headerEl.parentElement.classList.toggle('open');
+}
+
+function expandAll() {
+  document.querySelectorAll('.card').forEach(c => c.classList.add('open'));
+}
+
+function collapseAll() {
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('open'));
+}
+
+function togglePrintMode() {
+  document.body.classList.toggle('print-mode');
+}
+
+let originalContent = {};
+
+function toggleEdit() {
+  document.body.classList.add('editing');
+  document.querySelectorAll('.card').forEach(c => c.classList.add('open'));
+
+  document.querySelectorAll('.field .val').forEach(el => {
+    const field = el.dataset.field;
+    if (field) originalContent[field] = el.innerHTML;
+    el.contentEditable = 'true';
+    if (el.classList.contains('empty')) {
+      el.textContent = '';
+      el.dataset.wasEmpty = 'true';
+    }
+  });
+
+  document.getElementById('editBtn').style.display = 'none';
+  document.getElementById('saveBtn').style.display = '';
+  document.getElementById('cancelBtn').style.display = '';
+}
+
+function cancelEdit() {
+  document.querySelectorAll('.field .val').forEach(el => {
+    const field = el.dataset.field;
+    if (field && originalContent[field] !== undefined) {
+      el.innerHTML = originalContent[field];
+      if (el.dataset.wasEmpty === 'true') {
+        el.classList.add('empty');
+        delete el.dataset.wasEmpty;
+      }
+    }
+    el.contentEditable = 'false';
+  });
+
+  document.body.classList.remove('editing');
+  document.getElementById('editBtn').style.display = '';
+  document.getElementById('saveBtn').style.display = 'none';
+  document.getElementById('cancelBtn').style.display = 'none';
+}
+
+function saveChanges() {
+  document.querySelectorAll('.field .val').forEach(el => {
+    const text = el.textContent.trim();
+    if (text === '' || text === '—') {
+      el.classList.add('empty');
+      el.innerHTML = '—';
+    } else {
+      el.classList.remove('empty');
+    }
+    el.contentEditable = 'false';
+    delete el.dataset.wasEmpty;
+  });
+
+  document.body.classList.remove('editing');
+  document.getElementById('editBtn').style.display = '';
+  document.getElementById('saveBtn').style.display = 'none';
+  document.getElementById('cancelBtn').style.display = 'none';
+
+  downloadModifiedFile();
+}
+
+function downloadModifiedFile() {
+  const html = '<!DOCTYPE html>\\n' + document.documentElement.outerHTML;
+  const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const nameEl = document.querySelector('.char-name');
+  const charName = nameEl ? nameEl.textContent.trim() : 'Personnage';
+  const cleanName = charName.replace(/[\\\\\\/:*?"<>|]/g, '').trim() || 'Personnage';
+  a.href = url;
+  a.download = cleanName + '.html';
+  a.click();
+  URL.revokeObjectURL(url);
+  alert('La fiche modifiée a été téléchargée. Tu peux la remplacer dans ton Drive.');
+}
+<\/script>
+
+</body>
+</html>`;
 }
 
 function esc(str) {
